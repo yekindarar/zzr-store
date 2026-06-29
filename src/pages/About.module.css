@@ -1,0 +1,83 @@
+.page {
+  padding-top: 100px;
+  padding-bottom: 80px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.hero {
+  text-align: center;
+  padding: 80px 0 60px;
+}
+
+.mark {
+  color: var(--accent);
+  font-size: 20px;
+  margin-bottom: 20px;
+  display: block;
+}
+
+.title {
+  font-size: 40px;
+  font-weight: 300;
+  letter-spacing: 4px;
+  margin-bottom: 20px;
+}
+
+.line {
+  width: 40px;
+  height: 1px;
+  background: var(--accent);
+  margin: 0 auto 20px;
+}
+
+.subtitle {
+  font-size: 15px;
+  color: var(--text-secondary);
+}
+
+.content {
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.section {
+  margin-bottom: 60px;
+}
+
+.section h2 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.section p {
+  font-size: 15px;
+  color: var(--text-secondary);
+  line-height: 1.8;
+}
+
+.contact {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.contactItem {
+  display: flex;
+  gap: 24px;
+  font-size: 14px;
+}
+
+.contactLabel {
+  color: var(--text-secondary);
+  min-width: 48px;
+  font-weight: 500;
+}

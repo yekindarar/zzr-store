@@ -1,0 +1,224 @@
+.splash {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: #0d0d0f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* 背景光晕 */
+.bgGlow {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 600px 400px at 50% 45%, rgba(192, 160, 96, 0.06) 0%, transparent 70%),
+    radial-gradient(ellipse 300px 300px at 50% 50%, rgba(192, 160, 96, 0.03) 0%, transparent 100%);
+  opacity: 1;
+  transition: opacity 5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.bgFade {
+  opacity: 0;
+}
+
+.content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ◆ — 快速弹入，带 overshoot */
+.mark {
+  color: var(--accent);
+  font-size: 16px;
+  margin-bottom: 20px;
+  opacity: 0;
+  transform: translateY(-8px) scale(0.6);
+  transition: none;
+}
+
+.markIn {
+  animation: markBounce 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes markBounce {
+  0% {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.6);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(2px) scale(1.1);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Logo wrap — 整体容器 */
+.logoWrap {
+  margin-bottom: 16px;
+  opacity: 0;
+  transform: translateY(16px);
+  transition: none;
+}
+
+.logoWrapIn {
+  animation: logoSlide 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes logoSlide {
+  0% {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.logoMark {
+  width: 56px;
+}
+
+/* 标题字母 — 每个带弹性 */
+.title {
+  display: flex;
+  gap: 4px;
+  justify-content: center;
+  margin-bottom: 0;
+}
+
+.char {
+  display: inline-block;
+  color: #ffffff;
+  font-size: 80px;
+  font-weight: 200;
+  letter-spacing: 10px;
+  opacity: 0;
+  transform: translateY(30px);
+  animation: none;
+}
+
+.charIn {
+  animation: charSpring 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes charSpring {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-4px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 副标题组 — 整体渐入 */
+.subGroup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: none;
+}
+
+.subGroupIn {
+  animation: subFade 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes subFade {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.subtitle {
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 12px;
+  letter-spacing: 8px;
+  font-weight: 300;
+  margin-top: 20px;
+}
+
+/* 分割线 — 从中间向两边展开 */
+.line {
+  width: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(192, 160, 96, 0.5), transparent);
+  margin-top: 24px;
+  transition: width 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.1s;
+}
+
+.subGroupIn .line {
+  width: 56px;
+}
+
+/* 按钮 — 带微弱上弹 */
+.enterBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 44px;
+  padding: 14px 40px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 3px;
+  color: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 30px;
+  background: transparent;
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: none;
+}
+
+.enterBtn:hover {
+  color: #0d0d0f;
+  background: var(--accent);
+  border-color: var(--accent);
+  transform: translateY(-1px);
+}
+
+.enterBtn svg {
+  transition: transform 0.3s ease;
+}
+
+.enterBtn:hover svg {
+  transform: translateX(3px);
+}
+
+.enterVisible {
+  animation: btnFade 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes btnFade {
+  0% {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

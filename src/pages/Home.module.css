@@ -1,0 +1,269 @@
+.page {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Hero */
+.hero {
+  position: relative;
+  min-height: 90vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.heroBg {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #1c1c1e 0%, #2c2c2e 100%);
+  z-index: 0;
+}
+
+.heroInner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 60px;
+  padding: 120px 24px 80px;
+}
+
+.heroContent {
+  flex: 1;
+  max-width: 520px;
+}
+
+.heroTag {
+  display: inline-block;
+  font-size: 12px;
+  letter-spacing: 3px;
+  color: var(--accent);
+  border: 1px solid rgba(192, 160, 96, 0.3);
+  padding: 6px 16px;
+  border-radius: 20px;
+  margin-bottom: 24px;
+}
+
+.heroTitle {
+  font-size: 56px;
+  font-weight: 300;
+  line-height: 1.15;
+  color: #ffffff;
+  letter-spacing: -1px;
+  margin-bottom: 20px;
+}
+
+.heroAccent {
+  color: var(--accent);
+  font-weight: 400;
+}
+
+.heroDesc {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.5);
+  line-height: 1.7;
+  margin-bottom: 40px;
+}
+
+.heroBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 32px;
+  background: var(--accent);
+  color: #1c1c1e;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 30px;
+  transition: all var(--transition);
+}
+
+.heroBtn:hover {
+  background: var(--accent-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(192, 160, 96, 0.3);
+}
+
+.heroVisual {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.heroLogo {
+  width: 160px;
+  animation: float 4s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+
+/* Sections common */
+.sectionHeader {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.sectionTitle {
+  font-size: 32px;
+  font-weight: 400;
+  letter-spacing: -0.5px;
+  margin-bottom: 8px;
+}
+
+.sectionDesc {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+/* Categories */
+.categories {
+  padding: 100px 0;
+}
+
+.categoryGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.categoryCard {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 40px 32px;
+  text-align: center;
+  transition: all var(--transition);
+}
+
+.categoryCard:hover {
+  border-color: var(--accent);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-4px);
+}
+
+.categoryIcon {
+  width: 80px;
+  margin: 0 auto 20px;
+  color: var(--text);
+  opacity: 0.6;
+}
+
+.categoryCard h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.categoryCard p {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+/* Featured */
+.featured {
+  padding: 0 0 100px;
+}
+
+.productGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.productCard {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  transition: all var(--transition);
+}
+
+.productCard:hover {
+  border-color: var(--accent);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-4px);
+}
+
+.productImage {
+  aspect-ratio: 4/3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  background: #f5f5f0;
+}
+
+.productImage img {
+  width: 60%;
+  height: auto;
+  opacity: 0.7;
+}
+
+.productInfo {
+  padding: 20px;
+}
+
+.productBrand {
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: var(--accent);
+  text-transform: uppercase;
+}
+
+.productName {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 4px 0 8px;
+}
+
+.productPrice {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--text);
+}
+
+/* Philosophy */
+.philosophy {
+  padding: 100px 0;
+  background: #1c1c1e;
+  color: #ffffff;
+}
+
+.philInner {
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.philLine {
+  width: 40px;
+  height: 1px;
+  background: var(--accent);
+  margin: 0 auto 32px;
+}
+
+.philTitle {
+  font-size: 36px;
+  font-weight: 300;
+  letter-spacing: 2px;
+  margin-bottom: 20px;
+}
+
+.philText {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.5);
+  line-height: 1.8;
+}
