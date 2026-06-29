@@ -85,7 +85,7 @@ export default function Home() {
   return (
     <div className={styles.page}>
       {/* Hero */}
-      <section className={styles.snapSection} ref={heroRef}>
+      <section className={styles.snapSection} ref={heroRef} data-nav-hero>
         <div className={styles.heroBg} />
         <div className={`container ${styles.heroInner}`}>
           <div className={styles.heroContent}>

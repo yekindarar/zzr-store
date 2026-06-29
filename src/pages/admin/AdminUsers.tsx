@@ -13,9 +13,16 @@ export default function AdminUsers() {
   const [showAdd, setShowAdd] = useState(false);
   const [addForm, setAddForm] = useState({ email: '', password: '', name: '', role: 'user' });
 
+  const [error, setError] = useState('');
+
   const refresh = async () => {
-    const data = await getAllUsers();
-    setUsers(data);
+    setError('');
+    try {
+      const data = await getAllUsers();
+      setUsers(data);
+    } catch (e) {
+      setError('加载用户失败：' + (e instanceof Error ? e.message : '未知错误'));
+    }
   };
 
   useEffect(() => { refresh(); }, []);
@@ -28,9 +35,13 @@ export default function AdminUsers() {
 
   const handleSave = async () => {
     if (!editing) return;
-    await adminUpdateUser(editing.id, { name: editName, role: editRole });
-    setEditing(null);
-    refresh();
+    try {
+      await adminUpdateUser(editing.id, { name: editName, role: editRole });
+      setEditing(null);
+      refresh();
+    } catch {
+      alert('保存失败');
+    }
   };
 
   const handleAdd = async () => {
@@ -60,8 +71,12 @@ export default function AdminUsers() {
       return;
     }
     if (confirm('确定删除该用户？')) {
-      await adminDeleteUser(id);
-      refresh();
+      try {
+        await adminDeleteUser(id);
+        refresh();
+      } catch {
+        alert('删除失败');
+      }
     }
   };
 
@@ -71,6 +86,8 @@ export default function AdminUsers() {
         <h1 className={layoutStyles.headerTitle}>用户管理</h1>
         <p className={layoutStyles.headerSub}>共 {users.length} 个用户</p>
       </div>
+
+      {error && <p style={{ color: '#d32f2f', fontSize: 13, padding: '0 0 16px', textAlign: 'center' }}>{error}</p>}
 
       <div className={styles.toolbar}>
         <div />

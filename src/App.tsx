@@ -39,7 +39,7 @@ function AppLayout() {
     return <Splash onDone={handleSplashDone} />;
   }
 
-  const isAdmin = location.hash.startsWith('#/admin');
+  const isAdmin = location.pathname.startsWith('/admin');
 
   if (isAdmin) {
     return (

@@ -9,13 +9,17 @@ export default function AdminProducts() {
   const [showModal, setShowModal] = useState(false);
   const [editing, setEditing] = useState<any>(null);
   const [form, setForm] = useState({ name: '', category: 'mouse', price: '', description: '', image: '' });
+  const [error, setError] = useState('');
 
   const refresh = async () => {
     setLoading(true);
+    setError('');
     try {
       const data = await adminApi.getProducts();
       setProducts(data.products);
-    } catch {}
+    } catch (e) {
+      setError('加载商品失败：' + (e instanceof Error ? e.message : '未知错误'));
+    }
     setLoading(false);
   };
 
@@ -78,8 +82,9 @@ export default function AdminProducts() {
       </div>
 
       {loading && <p style={{ color: 'var(--text-secondary)', fontSize: 13 }}>加载中...</p>}
+      {error && <p style={{ color: '#d32f2f', fontSize: 13, padding: 20, textAlign: 'center' }}>{error}</p>}
 
-      {!loading && (
+      {!loading && !error && (
         <table className={styles.table}>
           <thead>
             <tr>

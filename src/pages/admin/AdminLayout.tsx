@@ -10,8 +10,16 @@ const navItems = [
 ];
 
 export default function AdminLayout() {
-  const { user, role } = useAuth();
+  const { user, role, loading } = useAuth();
   const location = useLocation();
+
+  if (loading) {
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', color: 'var(--text-secondary)', fontSize: 14 }}>
+        加载中...
+      </div>
+    );
+  }
 
   if (!user || (role !== 'admin' && role !== 'owner')) {
     return <Navigate to="/login" replace />;
@@ -30,7 +38,7 @@ export default function AdminLayout() {
 
         <div className={styles.nav}>
           {navItems.map((item) => {
-            const isActive = location.hash === `#${item.to}` || location.hash === `#${item.to}/`;
+            const isActive = location.pathname === item.to || location.pathname === `${item.to}/`;
             return (
               <Link
                 key={item.to}

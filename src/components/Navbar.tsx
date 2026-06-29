@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
@@ -7,6 +8,29 @@ export default function Navbar() {
   const location = useLocation();
   const { totalItems } = useCart();
   const { user, role } = useAuth();
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const isHome = location.pathname === '/home' || location.pathname === '/';
+    if (!isHome) {
+      setScrolled(true);
+      return;
+    }
+
+    const check = () => {
+      const hero = document.querySelector('[data-nav-hero]');
+      if (!hero) {
+        setScrolled(true);
+        return;
+      }
+      // Hero 底部超过导航栏底部 + 一点缓冲 = 滚过了
+      setScrolled(hero.getBoundingClientRect().bottom <= 80);
+    };
+
+    check();
+    window.addEventListener('scroll', check, { passive: true });
+    return () => window.removeEventListener('scroll', check);
+  }, [location.pathname]);
 
   const links = [
     { to: '/home', label: '首页' },
@@ -15,7 +39,7 @@ export default function Navbar() {
   ];
 
   return (
-    <nav className={styles.nav}>
+    <nav className={`${styles.nav} ${scrolled ? styles.scrolled : ''}`}>
       <div className={`container ${styles.inner}`}>
         <Link to="/home" className={styles.logo}>
           <svg className={styles.logoIcon} viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
