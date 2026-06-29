@@ -1,6 +1,8 @@
 import { HashRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { CartProvider } from './context/CartContext';
+import { AuthProvider } from './context/AuthContext';
+import { OrderProvider } from './context/OrderContext';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Splash from './pages/Splash';
@@ -10,6 +12,13 @@ import ProductDetail from './pages/ProductDetail';
 import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import About from './pages/About';
+import Login from './pages/Login';
+import Account from './pages/Account';
+import AdminLayout from './pages/admin/AdminLayout';
+import AdminDashboard from './pages/admin/Dashboard';
+import AdminProducts from './pages/admin/AdminProducts';
+import AdminOrders from './pages/admin/AdminOrders';
+import AdminUsers from './pages/admin/AdminUsers';
 
 function AppLayout() {
   const location = useLocation();
@@ -30,6 +39,21 @@ function AppLayout() {
     return <Splash onDone={handleSplashDone} />;
   }
 
+  const isAdmin = location.hash.startsWith('#/admin');
+
+  if (isAdmin) {
+    return (
+      <Routes>
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route index element={<AdminDashboard />} />
+          <Route path="products" element={<AdminProducts />} />
+          <Route path="orders" element={<AdminOrders />} />
+          <Route path="users" element={<AdminUsers />} />
+        </Route>
+      </Routes>
+    );
+  }
+
   return (
     <>
       <Navbar />
@@ -42,6 +66,8 @@ function AppLayout() {
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/about" element={<About />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/account" element={<Account />} />
         </Routes>
       </main>
       <Footer />
@@ -51,10 +77,14 @@ function AppLayout() {
 
 export default function App() {
   return (
-    <CartProvider>
-      <HashRouter>
-        <AppLayout />
-      </HashRouter>
-    </CartProvider>
+    <AuthProvider>
+      <CartProvider>
+        <OrderProvider>
+          <HashRouter>
+            <AppLayout />
+          </HashRouter>
+        </OrderProvider>
+      </CartProvider>
+    </AuthProvider>
   );
 }

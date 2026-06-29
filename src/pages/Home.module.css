@@ -1,27 +1,21 @@
 .page {
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.8s ease, transform 0.8s ease;
-}
-
-.visible {
   opacity: 1;
-  transform: translateY(0);
 }
 
-/* Hero */
-.hero {
-  position: relative;
-  min-height: 90vh;
+/* 每个翻页区块 */
+.snapSection {
+  min-height: 100vh;
   display: flex;
   align-items: center;
+  position: relative;
   overflow: hidden;
 }
 
+/* Hero */
 .heroBg {
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, #1c1c1e 0%, #2c2c2e 100%);
+  background: linear-gradient(145deg, #1a1a1c 0%, #28282a 100%);
   z-index: 0;
 }
 
@@ -31,64 +25,70 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 60px;
-  padding: 120px 24px 80px;
+  gap: 80px;
+  width: 100%;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 32px;
 }
 
 .heroContent {
   flex: 1;
-  max-width: 520px;
+  max-width: 480px;
 }
 
 .heroTag {
   display: inline-block;
-  font-size: 12px;
+  font-size: 11px;
   letter-spacing: 3px;
   color: var(--accent);
-  border: 1px solid rgba(192, 160, 96, 0.3);
-  padding: 6px 16px;
-  border-radius: 20px;
-  margin-bottom: 24px;
+  border: 1px solid rgba(196, 160, 90, 0.25);
+  padding: 5px 14px;
+  border-radius: 16px;
+  margin-bottom: 28px;
+  font-weight: 400;
 }
 
 .heroTitle {
-  font-size: 56px;
-  font-weight: 300;
-  line-height: 1.15;
+  font-size: 52px;
+  font-weight: 250;
+  line-height: 1.1;
   color: #ffffff;
-  letter-spacing: -1px;
+  letter-spacing: -0.5px;
   margin-bottom: 20px;
 }
 
 .heroAccent {
   color: var(--accent);
-  font-weight: 400;
+  font-weight: 350;
 }
 
 .heroDesc {
-  font-size: 16px;
-  color: rgba(255, 255, 255, 0.5);
-  line-height: 1.7;
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.45);
+  line-height: 1.8;
   margin-bottom: 40px;
+  font-weight: 300;
 }
 
 .heroBtn {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 14px 32px;
+  padding: 13px 30px;
   background: var(--accent);
-  color: #1c1c1e;
-  font-size: 14px;
-  font-weight: 600;
-  border-radius: 30px;
+  color: #1a1a1c;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 24px;
   transition: all var(--transition);
+  letter-spacing: 0.5px;
 }
 
 .heroBtn:hover {
   background: var(--accent-dark);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(192, 160, 96, 0.3);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(196, 160, 90, 0.2);
 }
 
 .heroVisual {
@@ -99,13 +99,37 @@
 }
 
 .heroLogo {
-  width: 160px;
-  animation: float 4s ease-in-out infinite;
+  width: 140px;
+  animation: float 5s ease-in-out infinite;
+  opacity: 0.6;
 }
 
 @keyframes float {
   0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-12px); }
+  50% { transform: translateY(-10px); }
+}
+
+/* 滚动提示 */
+.scrollHint {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: rgba(255, 255, 255, 0.25);
+  font-size: 10px;
+  letter-spacing: 2px;
+  font-weight: 300;
+  animation: hintBounce 2s ease-in-out infinite;
+  z-index: 2;
+}
+
+@keyframes hintBounce {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(6px); }
 }
 
 /* Sections common */
@@ -115,35 +139,38 @@
 }
 
 .sectionTitle {
-  font-size: 32px;
-  font-weight: 400;
-  letter-spacing: -0.5px;
-  margin-bottom: 8px;
+  font-size: 30px;
+  font-weight: 300;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
 }
 
 .sectionDesc {
-  font-size: 14px;
+  font-size: 13px;
   color: var(--text-secondary);
+  font-weight: 350;
+  letter-spacing: 0.5px;
 }
 
 /* Categories */
 .categories {
-  padding: 100px 0;
+  width: 100%;
+  padding: 80px 0;
 }
 
 .categoryGrid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 24px;
-  max-width: 600px;
+  gap: 20px;
+  max-width: 520px;
   margin: 0 auto;
 }
 
 .categoryCard {
   background: var(--bg-card);
   border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 40px 32px;
+  border-radius: var(--radius-md);
+  padding: 36px 28px;
   text-align: center;
   transition: all var(--transition);
 }
@@ -151,42 +178,45 @@
 .categoryCard:hover {
   border-color: var(--accent);
   box-shadow: var(--shadow-md);
-  transform: translateY(-4px);
+  transform: translateY(-3px);
 }
 
 .categoryIcon {
-  width: 80px;
-  margin: 0 auto 20px;
+  width: 72px;
+  margin: 0 auto 18px;
   color: var(--text);
-  opacity: 0.6;
+  opacity: 0.45;
 }
 
 .categoryCard h3 {
-  font-size: 18px;
-  font-weight: 600;
+  font-size: 16px;
+  font-weight: 500;
   margin-bottom: 6px;
+  letter-spacing: 0.5px;
 }
 
 .categoryCard p {
-  font-size: 13px;
+  font-size: 12px;
   color: var(--text-secondary);
+  font-weight: 350;
 }
 
 /* Featured */
 .featured {
-  padding: 0 0 100px;
+  width: 100%;
+  padding: 80px 0;
 }
 
 .productGrid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
+  gap: 16px;
 }
 
 .productCard {
   background: var(--bg-card);
   border: 1px solid var(--border);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-sm);
   overflow: hidden;
   transition: all var(--transition);
 }
@@ -194,7 +224,7 @@
 .productCard:hover {
   border-color: var(--accent);
   box-shadow: var(--shadow-md);
-  transform: translateY(-4px);
+  transform: translateY(-3px);
 }
 
 .productImage {
@@ -203,67 +233,75 @@
   align-items: center;
   justify-content: center;
   padding: 32px;
-  background: #f5f5f0;
+  background: #f4f4f0;
 }
 
 .productImage img {
-  width: 60%;
+  width: 55%;
   height: auto;
-  opacity: 0.7;
+  opacity: 0.55;
 }
 
 .productInfo {
-  padding: 20px;
+  padding: 18px 20px;
 }
 
 .productBrand {
-  font-size: 11px;
+  font-size: 10px;
   letter-spacing: 2px;
   color: var(--accent);
   text-transform: uppercase;
+  font-weight: 500;
 }
 
 .productName {
-  font-size: 15px;
-  font-weight: 600;
+  font-size: 14px;
+  font-weight: 500;
   margin: 4px 0 8px;
+  letter-spacing: 0.3px;
 }
 
 .productPrice {
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--text);
 }
 
 /* Philosophy */
 .philosophy {
-  padding: 100px 0;
-  background: #1c1c1e;
+  width: 100%;
+  background: #1a1a1c;
   color: #ffffff;
+  display: flex;
+  align-items: center;
+  min-height: 100vh;
+  padding: 80px 0;
 }
 
 .philInner {
   text-align: center;
-  max-width: 600px;
+  max-width: 540px;
   margin: 0 auto;
 }
 
 .philLine {
-  width: 40px;
+  width: 32px;
   height: 1px;
   background: var(--accent);
-  margin: 0 auto 32px;
+  margin: 0 auto 28px;
+  opacity: 0.6;
 }
 
 .philTitle {
-  font-size: 36px;
-  font-weight: 300;
-  letter-spacing: 2px;
+  font-size: 32px;
+  font-weight: 250;
+  letter-spacing: 3px;
   margin-bottom: 20px;
 }
 
 .philText {
-  font-size: 15px;
-  color: rgba(255, 255, 255, 0.5);
-  line-height: 1.8;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.4);
+  line-height: 1.9;
+  font-weight: 300;
 }

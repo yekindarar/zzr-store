@@ -1,22 +1,63 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import { useAuth } from '../context/AuthContext';
+import { useOrders } from '../context/OrderContext';
 import styles from './Checkout.module.css';
 
 export default function Checkout() {
   const { items, totalPrice, clearCart } = useCart();
+  const { user } = useAuth();
+  const { createOrder } = useOrders();
   const navigate = useNavigate();
   const [visible, setVisible] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [orderId, setOrderId] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+
+  const [name, setName] = useState(user?.name || '');
+  const [phone, setPhone] = useState(user?.phone || '');
+  const [address, setAddress] = useState('');
+  const [city, setCity] = useState('');
+  const [zip, setZip] = useState('');
+  const [payment, setPayment] = useState('微信支付');
 
   useEffect(() => { setVisible(true); }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
-    clearCart();
-    setTimeout(() => navigate('/'), 3000);
+    if (submitting) return;
+    setSubmitting(true);
+
+    try {
+      const id = await createOrder({
+        items: items.map((item) => ({
+          productId: item.product.id,
+          productName: item.product.name,
+          price: item.product.price,
+          quantity: item.quantity,
+          color: item.color,
+          image: item.product.image,
+        })),
+        total: totalPrice,
+        shipping: { name, phone, address, city, zip },
+        paymentMethod: payment,
+      });
+
+      setOrderId(id);
+      setSubmitted(true);
+      clearCart();
+    } catch {
+      alert('提交订单失败，请稍后重试');
+    } finally {
+      setSubmitting(false);
+    }
   };
+
+  if (!user) {
+    navigate('/login');
+    return null;
+  }
 
   if (items.length === 0 && !submitted) {
     navigate('/cart');
@@ -30,8 +71,11 @@ export default function Checkout() {
           <div className={styles.success}>
             <div className={styles.successIcon}>✓</div>
             <h2>订单已提交</h2>
+            <p className={styles.orderIdText}>订单号：{orderId}</p>
             <p>感谢您的购买！我们将尽快处理您的订单。</p>
-            <p className={styles.redirect}>即将返回首页...</p>
+            <button className={styles.returnBtn} onClick={() => navigate(user ? '/account' : '/')}>
+              {user ? '查看订单' : '返回首页'}
+            </button>
           </div>
         </div>
       </div>
@@ -49,32 +93,36 @@ export default function Checkout() {
             <div className={styles.fieldGroup}>
               <div className={styles.field}>
                 <label>姓名</label>
-                <input type="text" required placeholder="请输入姓名" />
+                <input type="text" required value={name} onChange={(e) => setName(e.target.value)} placeholder="请输入姓名" />
               </div>
               <div className={styles.field}>
                 <label>电话</label>
-                <input type="tel" required placeholder="请输入电话号码" />
+                <input type="tel" required value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="请输入电话号码" />
               </div>
             </div>
             <div className={styles.field}>
               <label>地址</label>
-              <input type="text" required placeholder="请输入详细地址" />
+              <input type="text" required value={address} onChange={(e) => setAddress(e.target.value)} placeholder="请输入详细地址" />
+            </div>
+            <div className={styles.fieldGroup}>
+              <div className={styles.field}>
+                <label>城市</label>
+                <input type="text" required value={city} onChange={(e) => setCity(e.target.value)} placeholder="城市" />
+              </div>
+              <div className={styles.field}>
+                <label>邮编</label>
+                <input type="text" value={zip} onChange={(e) => setZip(e.target.value)} placeholder="选填" />
+              </div>
             </div>
 
             <h2 className={styles.sectionTitle} style={{ marginTop: 40 }}>支付方式</h2>
             <div className={styles.paymentOptions}>
-              <label className={styles.paymentOption}>
-                <input type="radio" name="payment" defaultChecked />
-                <span>微信支付</span>
-              </label>
-              <label className={styles.paymentOption}>
-                <input type="radio" name="payment" />
-                <span>支付宝</span>
-              </label>
-              <label className={styles.paymentOption}>
-                <input type="radio" name="payment" />
-                <span>银行卡</span>
-              </label>
+              {['微信支付', '支付宝', '银行卡'].map((p) => (
+                <label key={p} className={styles.paymentOption}>
+                  <input type="radio" name="payment" checked={payment === p} onChange={() => setPayment(p)} />
+                  <span>{p}</span>
+                </label>
+              ))}
             </div>
           </div>
 
@@ -92,8 +140,8 @@ export default function Checkout() {
               <span>合计</span>
               <span className={styles.totalPrice}>¥{totalPrice}</span>
             </div>
-            <button type="submit" className={styles.submitBtn}>
-              提交订单
+            <button type="submit" className={styles.submitBtn} disabled={submitting}>
+              {submitting ? '提交中...' : '提交订单'}
             </button>
           </div>
         </form>

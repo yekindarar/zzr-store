@@ -1,9 +1,9 @@
 .page {
-  padding-top: 100px;
+  padding-top: 96px;
   padding-bottom: 80px;
   opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
+  transform: translateY(16px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
 }
 
 .visible {
@@ -18,66 +18,71 @@
 
 .mark {
   color: var(--accent);
-  font-size: 20px;
-  margin-bottom: 20px;
+  font-size: 18px;
+  margin-bottom: 18px;
   display: block;
+  opacity: 0.7;
 }
 
 .title {
-  font-size: 40px;
-  font-weight: 300;
-  letter-spacing: 4px;
-  margin-bottom: 20px;
+  font-size: 36px;
+  font-weight: 250;
+  letter-spacing: 5px;
+  margin-bottom: 18px;
 }
 
 .line {
-  width: 40px;
+  width: 32px;
   height: 1px;
   background: var(--accent);
-  margin: 0 auto 20px;
+  margin: 0 auto 18px;
+  opacity: 0.5;
 }
 
 .subtitle {
-  font-size: 15px;
+  font-size: 14px;
   color: var(--text-secondary);
+  font-weight: 350;
 }
 
 .content {
-  max-width: 640px;
+  max-width: 600px;
   margin: 0 auto;
 }
 
 .section {
-  margin-bottom: 60px;
+  margin-bottom: 56px;
 }
 
 .section h2 {
-  font-size: 18px;
-  font-weight: 600;
-  margin-bottom: 16px;
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 14px;
+  letter-spacing: 0.5px;
 }
 
 .section p {
-  font-size: 15px;
+  font-size: 14px;
   color: var(--text-secondary);
-  line-height: 1.8;
+  line-height: 1.9;
+  font-weight: 350;
 }
 
 .contact {
-  margin-top: 24px;
+  margin-top: 20px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 }
 
 .contactItem {
   display: flex;
-  gap: 24px;
-  font-size: 14px;
+  gap: 20px;
+  font-size: 13px;
 }
 
 .contactLabel {
   color: var(--text-secondary);
-  min-width: 48px;
-  font-weight: 500;
+  min-width: 44px;
+  font-weight: 450;
 }

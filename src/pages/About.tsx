@@ -10,7 +10,7 @@ export default function About() {
       <div className="container">
         <div className={styles.hero}>
           <span className={styles.mark}>◆</span>
-          <h1 className={styles.title}>关于 ZZR</h1>
+          <h1 className={styles.title}>关于</h1>
           <div className={styles.line} />
           <p className={styles.subtitle}>
             为追求极致体验的用户而生
@@ -21,7 +21,7 @@ export default function About() {
           <section className={styles.section}>
             <h2>我们的理念</h2>
             <p>
-              ZZR 诞生于对「手感」的执念。我们相信，工具的最高境界是让人忘记它的存在。
+              诞生于对「手感」的执念。我们相信，工具的最高境界是让人忘记它的存在。
               每一款鼠标的曲线、每一个鼠标垫的表面纹理，都经过无数次迭代，只为让操作回归本能。
             </p>
           </section>

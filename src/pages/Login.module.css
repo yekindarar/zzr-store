@@ -1,0 +1,173 @@
+.page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 100px 24px 60px;
+}
+
+.card {
+  width: 100%;
+  max-width: 400px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 48px 36px;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 36px;
+}
+
+.logo {
+  width: 32px;
+  margin-bottom: 16px;
+  opacity: 0.6;
+}
+
+.title {
+  font-size: 22px;
+  font-weight: 400;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  font-size: 13px;
+  color: var(--text-secondary);
+  font-weight: 350;
+}
+
+.tabs {
+  display: flex;
+  gap: 0;
+  margin-bottom: 28px;
+  border-bottom: 1px solid var(--border);
+}
+
+.tab {
+  flex: 1;
+  padding: 12px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--text-secondary);
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tab:hover {
+  color: var(--text);
+}
+
+.tabActive {
+  color: var(--text);
+  border-bottom-color: var(--accent);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  letter-spacing: 0.5px;
+}
+
+.field input {
+  padding: 12px 14px;
+  font-size: 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.2s ease;
+  font-family: inherit;
+}
+
+.field input:focus {
+  border-color: var(--accent);
+}
+
+.submitBtn {
+  padding: 13px;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  background: var(--text);
+  color: var(--bg);
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 4px;
+}
+
+.submitBtn:hover {
+  opacity: 0.85;
+}
+
+.error {
+  font-size: 12px;
+  color: #d32f2f;
+  text-align: center;
+  margin-top: -8px;
+}
+
+.success {
+  font-size: 12px;
+  color: #2e7d32;
+  text-align: center;
+  margin-top: -8px;
+}
+
+.codeBtn {
+  padding: 10px 14px;
+  font-size: 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  color: var(--text);
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.codeBtn:hover {
+  border-color: var(--accent);
+}
+
+.codeBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.forgotBtn {
+  background: none;
+  border: none;
+  font-size: 12px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  text-align: center;
+  padding: 4px;
+  transition: color 0.15s ease;
+}
+
+.forgotBtn:hover {
+  color: var(--accent);
+}

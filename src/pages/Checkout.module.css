@@ -1,9 +1,9 @@
 .page {
-  padding-top: 100px;
+  padding-top: 96px;
   padding-bottom: 80px;
   opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
+  transform: translateY(16px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
 }
 
 .visible {
@@ -12,14 +12,15 @@
 }
 
 .title {
-  font-size: 32px;
-  font-weight: 400;
+  font-size: 30px;
+  font-weight: 300;
+  letter-spacing: 1px;
   margin-bottom: 40px;
 }
 
 .layout {
   display: grid;
-  grid-template-columns: 1fr 360px;
+  grid-template-columns: 1fr 340px;
   gap: 40px;
   align-items: start;
 }
@@ -27,40 +28,41 @@
 .formSection {
   background: var(--bg-card);
   border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  padding: 32px;
+  border-radius: var(--radius-sm);
+  padding: 28px;
 }
 
 .sectionTitle {
-  font-size: 16px;
-  font-weight: 600;
-  margin-bottom: 20px;
+  font-size: 15px;
+  font-weight: 500;
+  margin-bottom: 18px;
+  letter-spacing: 0.3px;
 }
 
 .fieldGroup {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 16px;
+  gap: 14px;
 }
 
 .field {
-  margin-bottom: 16px;
+  margin-bottom: 14px;
 }
 
 .field label {
   display: block;
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.5px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.8px;
   color: var(--text-secondary);
-  margin-bottom: 6px;
+  margin-bottom: 5px;
   text-transform: uppercase;
 }
 
 .field input {
   width: 100%;
-  padding: 12px 14px;
-  font-size: 14px;
+  padding: 11px 13px;
+  font-size: 13px;
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   background: var(--bg);
@@ -68,6 +70,7 @@
   outline: none;
   transition: border-color var(--transition);
   font-family: inherit;
+  font-weight: 350;
 }
 
 .field input:focus {
@@ -77,19 +80,20 @@
 .paymentOptions {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 }
 
 .paymentOption {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 14px;
+  padding: 12px;
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   cursor: pointer;
   transition: border-color var(--transition);
-  font-size: 14px;
+  font-size: 13px;
+  font-weight: 350;
 }
 
 .paymentOption:has(input:checked) {
@@ -104,63 +108,65 @@
 .orderSummary {
   background: var(--bg-card);
   border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  padding: 28px;
+  border-radius: var(--radius-sm);
+  padding: 24px;
   position: sticky;
-  top: 100px;
+  top: 96px;
 }
 
 .orderTitle {
-  font-size: 16px;
-  font-weight: 600;
-  margin-bottom: 16px;
-  padding-bottom: 16px;
+  font-size: 15px;
+  font-weight: 500;
+  margin-bottom: 14px;
+  padding-bottom: 14px;
   border-bottom: 1px solid var(--border);
 }
 
 .orderItem {
   display: flex;
   justify-content: space-between;
-  font-size: 13px;
+  font-size: 12px;
   color: var(--text-secondary);
-  margin-bottom: 10px;
+  margin-bottom: 8px;
+  font-weight: 350;
 }
 
 .orderItemName {
   flex: 1;
-  padding-right: 16px;
+  padding-right: 14px;
 }
 
 .orderTotal {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 16px;
-  padding-top: 16px;
+  margin-top: 14px;
+  padding-top: 14px;
   border-top: 1px solid var(--border);
-  font-size: 14px;
+  font-size: 13px;
 }
 
 .totalPrice {
-  font-size: 22px;
-  font-weight: 600;
+  font-size: 20px;
+  font-weight: 500;
 }
 
 .submitBtn {
   width: 100%;
-  padding: 14px;
-  margin-top: 24px;
+  padding: 13px;
+  margin-top: 20px;
   background: var(--text);
   color: white;
-  font-size: 14px;
-  font-weight: 600;
+  font-size: 13px;
+  font-weight: 500;
   border-radius: var(--radius-sm);
   transition: all var(--transition);
+  letter-spacing: 0.5px;
 }
 
 .submitBtn:hover {
   background: var(--accent);
-  color: #1c1c1e;
+  color: #1a1a1c;
 }
 
 /* Success */
@@ -170,31 +176,56 @@
 }
 
 .successIcon {
-  width: 64px;
-  height: 64px;
+  width: 56px;
+  height: 56px;
   border-radius: 50%;
   background: #34c759;
   color: white;
-  font-size: 28px;
+  font-size: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto 24px;
+  margin: 0 auto 20px;
 }
 
 .success h2 {
-  font-size: 24px;
-  font-weight: 500;
-  margin-bottom: 12px;
+  font-size: 22px;
+  font-weight: 400;
+  margin-bottom: 10px;
 }
 
 .success p {
-  font-size: 14px;
+  font-size: 13px;
   color: var(--text-secondary);
+  font-weight: 350;
+}
+
+.orderIdText {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+  font-weight: 400;
+}
+
+.returnBtn {
+  margin-top: 24px;
+  padding: 11px 28px;
+  font-size: 13px;
+  font-weight: 500;
+  background: var(--text);
+  color: var(--bg);
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.returnBtn:hover {
+  opacity: 0.85;
 }
 
 .redirect {
-  margin-top: 24px;
-  font-size: 12px !important;
+  margin-top: 20px;
+  font-size: 11px !important;
   color: var(--text-tertiary) !important;
 }
