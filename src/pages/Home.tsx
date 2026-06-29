@@ -181,7 +181,7 @@ export default function Home() {
 
       {/* Philosophy */}
       <ScrollReveal as="section" delay={100}>
-        <div className={styles.philosophy}>
+        <div className={styles.philosophy} data-nav-dark>
           <div className="container">
             <div className={styles.philInner} ref={philRef}>
               <div className={styles.philLine} />

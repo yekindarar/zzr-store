@@ -22,11 +22,15 @@ def _cleanup():
         expired = [k for k, v in _codes.items() if v["expires_at"] < now]
         for k in expired:
             del _codes[k]
-    threading.Timer(300, _cleanup).start()
+    t = threading.Timer(300, _cleanup)
+    t.daemon = True
+    t.start()
 
 # 清理函数，由 main.py 在 startup 时调用
 def start_cleanup():
-    threading.Timer(60, _cleanup).start()
+    t = threading.Timer(60, _cleanup)
+    t.daemon = True
+    t.start()
 
 
 def send_verification_code(email: str) -> bool:

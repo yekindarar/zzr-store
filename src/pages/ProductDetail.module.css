@@ -70,6 +70,13 @@
   opacity: 0.55;
 }
 
+.layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: start;
+}
+
 .infoSection {
   padding-top: 16px;
 }
@@ -89,7 +96,7 @@
   letter-spacing: -0.3px;
 }
 
-.description {
+.desc {
   font-size: 14px;
   color: var(--text-secondary);
   line-height: 1.8;
@@ -104,6 +111,16 @@
 }
 
 .label {
+  display: block;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 1.5px;
+  color: var(--text-secondary);
+  margin-bottom: 10px;
+  text-transform: uppercase;
+}
+
+.colorLabel {
   display: block;
   font-size: 11px;
   font-weight: 500;
@@ -162,6 +179,16 @@
 .added {
   background: #34c759 !important;
   color: white !important;
+}
+
+.featureLabel {
+  display: block;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 1.5px;
+  color: var(--text-secondary);
+  margin-bottom: 10px;
+  text-transform: uppercase;
 }
 
 .features ul {

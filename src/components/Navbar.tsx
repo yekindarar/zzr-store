@@ -23,8 +23,23 @@ export default function Navbar() {
         setScrolled(true);
         return;
       }
-      // Hero 底部超过导航栏底部 + 一点缓冲 = 滚过了
-      setScrolled(hero.getBoundingClientRect().bottom <= 80);
+
+      // Check if we're over any dark section
+      const darkSections = document.querySelectorAll('[data-nav-dark]');
+      let overDark = false;
+      for (const section of darkSections) {
+        const rect = section.getBoundingClientRect();
+        // Navbar is ~64px tall; dark section overlaps navbar area
+        if (rect.top < 64 && rect.bottom > 0) {
+          overDark = true;
+          break;
+        }
+      }
+
+      // Hero 底部超过导航栏底部 + 缓冲 = 滚过了 Hero
+      const pastHero = hero.getBoundingClientRect().bottom <= 64;
+      // Dark when over Hero or any dark section, light otherwise
+      setScrolled(pastHero && !overDark);
     };
 
     check();

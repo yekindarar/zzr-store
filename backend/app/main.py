@@ -108,21 +108,7 @@ def register(req: RegisterWithCodeRequest, db: Session = Depends(get_db)):
 @app.post("/api/auth/login")
 def login(req: LoginRequest, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.email == req.email).first()
-    import sys
-    if not user:
-        print('DEBUG: user not found', flush=True)
-        raise HTTPException(400, "邮箱或密码错误")
-    ok = _verify_password(req.password, user.password_hash)
-    print(f'DEBUG: verify={ok}', flush=True)
-    print(f'DEBUG: pw_from_request=***, pw_len={len(req.password)}', flush=True)
-    import hashlib
-    salt, h = user.password_hash.split('$', 1)
-    expected = hashlib.sha256((salt + req.password).encode()).hexdigest()
-    print(f'DEBUG: salt=***, stored_h={h}, computed_h={expected}, match={h==expected}', flush=True)
-    # Also test with hardcoded password
-    expected2 = hashlib.sha256((salt + 'zzr123456').encode()).hexdigest()
-    print(f'DEBUG: hardcoded_pw computed_h={expected2}, match={h==expected2}', flush=True)
-    if not ok:
+    if not user or not _verify_password(req.password, user.password_hash):
         raise HTTPException(400, "邮箱或密码错误")
     token = create_token(user.id)
     return {"token": token, "user": {"id": user.id, "email": user.email, "name": user.name, "role": user.role.value}}
@@ -218,10 +204,11 @@ def admin_delete_user(user_id: str, current_user: User = Depends(get_current_use
     user = db.query(User).filter(User.id == user_id).first()
     if not user:
         raise HTTPException(404, "用户不存在")
-    if current_user.role != UserRole.owner and user.role in (UserRole.admin, UserRole.owner):
-        raise HTTPException(403, "无权删除管理员账号")
+    # Admin can only delete regular users; owner can delete anyone except owner
     if user.role == UserRole.owner:
         raise HTTPException(400, "不能删除老板账号")
+    if current_user.role != UserRole.owner and user.role == UserRole.admin:
+        raise HTTPException(403, "无权删除管理员账号")
     db.delete(user)
     db.commit()
     return {"message": "已删除"}

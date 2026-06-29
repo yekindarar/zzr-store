@@ -43,7 +43,7 @@ export default function About() {
             <div className={styles.contact}>
               <div className={styles.contactItem}>
                 <span className={styles.contactLabel}>邮箱</span>
-                <span>hello@ether.com</span>
+                <span>zzr2282328134@126.com</span>
               </div>
               <div className={styles.contactItem}>
                 <span className={styles.contactLabel}>地址</span>

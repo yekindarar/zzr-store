@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Navigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import { useOrders } from '../context/OrderContext';
@@ -55,13 +55,11 @@ export default function Checkout() {
   };
 
   if (!user) {
-    navigate('/login');
-    return null;
+    return <Navigate to="/login" replace />;
   }
 
   if (items.length === 0 && !submitted) {
-    navigate('/cart');
-    return null;
+    return <Navigate to="/cart" replace />;
   }
 
   if (submitted) {

@@ -61,8 +61,7 @@
 }
 
 .catBtn:hover.catActive {
-  border-color: var(--text);
-  color: white;
+  opacity: 0.85;
 }
 
 .catActive {
@@ -70,6 +69,19 @@
   color: white;
   border-color: var(--text);
   font-weight: 450;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 32px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.search {
+  position: relative;
 }
 
 .searchWrap {
@@ -99,6 +111,7 @@
   font-family: inherit;
   font-weight: 350;
   letter-spacing: 0.2px;
+  box-sizing: border-box;
 }
 
 .searchInput:focus {
