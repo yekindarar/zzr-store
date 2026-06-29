@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 200" fill="none">
+  <rect x="15" y="25" width="250" height="150" rx="6" stroke="currentColor" stroke-width="2.5"/>
+  <rect x="22" y="32" width="236" height="136" rx="3" stroke="currentColor" stroke-width="0.5" opacity="0.2"/>
+  <circle cx="50" cy="60" r="2" stroke="currentColor" stroke-width="0.5" opacity="0.15"/>
+  <circle cx="80" cy="55" r="2" stroke="currentColor" stroke-width="0.5" opacity="0.15"/>
+  <circle cx="110" cy="62" r="2" stroke="currentColor" stroke-width="0.5" opacity="0.15"/>
+  <circle cx="140" cy="58" r="2" stroke="currentColor" stroke-width="0.5" opacity="0.15"/>
+  <circle cx="170" cy="63" r="2" stroke="currentColor" stroke-width="0.5" opacity="0.15"/>
+  <circle cx="200" cy="56" r="2" stroke="currentColor" stroke-width="0.5" opacity="0.15"/>
+  <circle cx="230" cy="61" r="2" stroke="currentColor" stroke-width="0.5" opacity="0.15"/>
+  <circle cx="65" cy="90" r="2" stroke="currentColor" stroke-width="0.5" opacity="0.15"/>
+  <circle cx="95" cy="85" r="2" stroke="currentColor" stroke-width="0.5" opacity="0.15"/>
+  <circle cx="125" cy="92" r="2" stroke="currentColor" stroke-width="0.5" opacity="0.15"/>
+  <circle cx="155" cy="88" r="2" stroke="currentColor" stroke-width="0.5" opacity="0.15"/>
+  <circle cx="185" cy="93" r="2" stroke="currentColor" stroke-width="0.5" opacity="0.15"/>
+  <circle cx="215" cy="87" r="2" stroke="currentColor" stroke-width="0.5" opacity="0.15"/>
+  <circle cx="50" cy="120" r="2" stroke="currentColor" stroke-width="0.5" opacity="0.15"/>
+  <circle cx="80" cy="115" r="2" stroke="currentColor" stroke-width="0.5" opacity="0.15"/>
+  <circle cx="110" cy="122" r="2" stroke="currentColor" stroke-width="0.5" opacity="0.15"/>
+  <circle cx="140" cy="118" r="2" stroke="currentColor" stroke-width="0.5" opacity="0.15"/>
+  <circle cx="170" cy="123" r="2" stroke="currentColor" stroke-width="0.5" opacity="0.15"/>
+  <circle cx="200" cy="117" r="2" stroke="currentColor" stroke-width="0.5" opacity="0.15"/>
+  <circle cx="230" cy="124" r="2" stroke="currentColor" stroke-width="0.5" opacity="0.15"/>
+  <circle cx="65" cy="150" r="2" stroke="currentColor" stroke-width="0.5" opacity="0.15"/>
+  <circle cx="95" cy="145" r="2" stroke="currentColor" stroke-width="0.5" opacity="0.15"/>
+  <circle cx="125" cy="152" r="2" stroke="currentColor" stroke-width="0.5" opacity="0.15"/>
+  <circle cx="155" cy="148" r="2" stroke="currentColor" stroke-width="0.5" opacity="0.15"/>
+  <circle cx="185" cy="153" r="2" stroke="currentColor" stroke-width="0.5" opacity="0.15"/>
+  <circle cx="215" cy="147" r="2" stroke="currentColor" stroke-width="0.5" opacity="0.15"/>
+</svg>
