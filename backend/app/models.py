@@ -45,7 +45,9 @@ class Order(Base):
     shipping_city = Column(String, default="")
     shipping_zip = Column(String, default="")
     payment_method = Column(String, default="")
+    tracking_number = Column(String, default="")
     created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
+    updated_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
 
 
 class Product(Base):

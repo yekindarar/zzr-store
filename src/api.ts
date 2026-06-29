@@ -72,6 +72,11 @@ export const userApi = {
       method: 'POST',
       body: JSON.stringify(data),
     }),
+
+  confirmDelivery: (orderId: string) =>
+    request<{ message: string }>(`/api/orders/${orderId}/confirm-delivery`, {
+      method: 'PUT',
+    }),
 };
 
 // === Admin ===
@@ -99,10 +104,10 @@ export const adminApi = {
   getOrders: () =>
     request<{ orders: any[] }>('/api/admin/orders'),
 
-  updateOrderStatus: (orderId: string, status: string) =>
+  updateOrderStatus: (orderId: string, status: string, trackingNumber?: string) =>
     request<{ message: string }>(`/api/admin/orders/${orderId}/status`, {
       method: 'PUT',
-      body: JSON.stringify({ status }),
+      body: JSON.stringify({ status, tracking_number: trackingNumber }),
     }),
 
   getProducts: () =>

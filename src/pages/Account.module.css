@@ -216,6 +216,154 @@
   margin-top: 8px;
 }
 
+/* Order progress bar (customer view) */
+.orderProgress {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 10px;
+  padding: 0 4px;
+}
+
+.orderStep {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  flex: 1;
+}
+
+.stepDot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 8px;
+  color: transparent;
+  transition: all 0.3s ease;
+}
+
+.stepDotActive {
+  border-color: var(--text);
+  background: var(--text);
+  color: var(--bg);
+}
+
+.stepDotCurrent {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--bg);
+  box-shadow: 0 0 0 3px rgba(192, 160, 96, 0.12);
+}
+
+.stepLabel {
+  font-size: 9px;
+  color: var(--text-secondary);
+  margin-top: 4px;
+  white-space: nowrap;
+}
+
+.stepLabelActive {
+  color: var(--text);
+  font-weight: 500;
+}
+
+.stepLine {
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  width: calc(100% - 16px);
+  height: 2px;
+  background: var(--border);
+  transform: translateX(8px);
+}
+
+.stepLineActive {
+  background: var(--text);
+}
+
+.orderStatusDesc {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-bottom: 14px;
+  font-style: italic;
+}
+
+.orderTracking {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: var(--bg);
+  border-radius: var(--radius-sm);
+  margin-bottom: 14px;
+  font-size: 13px;
+}
+
+.trackingLabel {
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.trackingValue {
+  font-family: monospace;
+  font-size: 13px;
+  color: var(--accent);
+  font-weight: 500;
+}
+
+.orderShipping {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+}
+
+.orderItemInfo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.orderItemColor {
+  display: flex;
+  align-items: center;
+}
+
+.miniColorDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  border: 1px solid rgba(0,0,0,0.1);
+}
+
+.confirmBtn {
+  width: 100%;
+  padding: 10px;
+  font-size: 13px;
+  font-weight: 500;
+  background: var(--text);
+  color: var(--bg);
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-family: inherit;
+  margin-top: 12px;
+}
+
+.confirmBtn:hover {
+  opacity: 0.85;
+}
+
+.confirmBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
 .empty {
   text-align: center;
   padding: 60px 0;

@@ -1,0 +1,486 @@
+.page {
+  /* uses layoutStyles container */
+}
+
+/* Filters */
+.filters {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.filterBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--text-secondary);
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-family: inherit;
+}
+
+.filterBtn:hover {
+  border-color: var(--text-secondary);
+  color: var(--text);
+}
+
+.filterActive {
+  background: var(--text);
+  color: var(--bg);
+  border-color: var(--text);
+}
+
+.filterCount {
+  font-size: 11px;
+  background: rgba(255,255,255,0.15);
+  color: inherit;
+  padding: 1px 6px;
+  border-radius: 10px;
+  min-width: 18px;
+  text-align: center;
+}
+
+.filterActive .filterCount {
+  background: rgba(255,255,255,0.25);
+}
+
+/* Loading / Empty */
+.loading {
+  font-size: 13px;
+  color: var(--text-secondary);
+  padding: 20px;
+  text-align: center;
+}
+
+.empty {
+  font-size: 13px;
+  color: var(--text-secondary);
+  text-align: center;
+  padding: 60px 0;
+}
+
+/* Order list */
+.orderList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Card */
+.card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  transition: box-shadow 0.2s ease;
+}
+
+.card:hover {
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+}
+
+.cardExpanded {
+  border-color: var(--text);
+  box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+}
+
+/* Card header */
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.cardLeft {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.orderId {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text);
+  font-family: monospace;
+  letter-spacing: 0.5px;
+}
+
+.cardRight {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.date {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.arrow {
+  font-size: 10px;
+  color: var(--text-secondary);
+  transition: transform 0.2s ease;
+}
+
+.arrowUp {
+  transform: rotate(180deg);
+}
+
+/* Badge */
+.badge {
+  font-size: 11px;
+  padding: 2px 10px;
+  border-radius: 12px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+}
+
+.pending {
+  background: #fff3e0;
+  color: #e65100;
+}
+
+.paid {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.shipped {
+  background: #e3f2fd;
+  color: #1565c0;
+}
+
+.delivered {
+  background: #f3e5f5;
+  color: #6a1b9a;
+}
+
+.cancelled {
+  background: #fbe9e7;
+  color: #bf360c;
+}
+
+/* Card body */
+.cardBody {
+  padding: 0 20px 20px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.sectionLabel {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 12px;
+}
+
+/* Progress bar */
+.progressSection {
+  padding-top: 20px;
+}
+
+.progressBar {
+  display: flex;
+  align-items: flex-start;
+  gap: 0;
+  padding: 0 10px;
+}
+
+.progressStep {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  flex: 1;
+}
+
+.progressDot {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  color: transparent;
+  transition: all 0.3s ease;
+  z-index: 1;
+}
+
+.dotActive {
+  border-color: var(--text);
+  background: var(--text);
+  color: var(--bg);
+}
+
+.dotCurrent {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--bg);
+  box-shadow: 0 0 0 4px rgba(192, 160, 96, 0.15);
+}
+
+.dotCancelled {
+  border-color: #d32f2f;
+  background: #d32f2f;
+  color: #fff;
+}
+
+.progressLabel {
+  font-size: 10px;
+  color: var(--text-secondary);
+  margin-top: 6px;
+  text-align: center;
+  white-space: nowrap;
+  transition: color 0.3s ease;
+}
+
+.labelActive {
+  color: var(--text);
+  font-weight: 500;
+}
+
+.labelCancelled {
+  color: #d32f2f;
+  font-weight: 500;
+}
+
+.progressLine {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  width: calc(100% - 24px);
+  height: 2px;
+  background: var(--border);
+  transition: background 0.3s ease;
+  transform: translateX(12px);
+}
+
+.lineActive {
+  background: var(--text);
+}
+
+/* Items */
+.itemsSection {
+  padding-top: 4px;
+}
+
+.item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(0,0,0,0.04);
+}
+
+.item:last-child {
+  border-bottom: none;
+}
+
+.itemInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.itemName {
+  font-size: 13px;
+  color: var(--text);
+  font-weight: 400;
+}
+
+.itemColor {
+  font-size: 11px;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.colorDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  border: 1px solid rgba(0,0,0,0.1);
+}
+
+.itemRight {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.itemQty {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.itemPrice {
+  font-size: 13px;
+  color: var(--text);
+  font-weight: 500;
+  min-width: 60px;
+  text-align: right;
+}
+
+/* Shipping */
+.shippingSection {
+  padding-top: 4px;
+}
+
+.shippingInfo {
+  display: flex;
+  gap: 16px;
+  font-size: 13px;
+  color: var(--text);
+  flex-wrap: wrap;
+}
+
+.paymentInfo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  font-size: 13px;
+  color: var(--text);
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+.metaLabel {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.totalPrice {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-left: auto;
+}
+
+/* Tracking */
+.trackingSection {
+  padding: 12px;
+  background: var(--bg);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+
+.trackingNumber {
+  font-family: monospace;
+  font-size: 13px;
+  color: var(--accent);
+  font-weight: 500;
+}
+
+/* Actions */
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-top: 4px;
+}
+
+.trackingInput {
+  /* wrapper for the tracking input */
+}
+
+.trackingField {
+  width: 100%;
+  padding: 10px 14px;
+  font-size: 13px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+  color: var(--text);
+  outline: none;
+  font-family: inherit;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease;
+}
+
+.trackingField:focus {
+  border-color: var(--accent);
+}
+
+.trackingField::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.5;
+}
+
+.actionBtns {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.btnPrimary {
+  padding: 8px 20px;
+  font-size: 12px;
+  font-weight: 500;
+  background: var(--text);
+  color: var(--bg);
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-family: inherit;
+  letter-spacing: 0.3px;
+}
+
+.btnPrimary:hover {
+  opacity: 0.85;
+}
+
+.btnPrimary:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.btnDanger {
+  padding: 8px 20px;
+  font-size: 12px;
+  font-weight: 400;
+  background: none;
+  color: #d32f2f;
+  border: 1px solid rgba(211, 47, 47, 0.2);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-family: inherit;
+}
+
+.btnDanger:hover {
+  background: rgba(211, 47, 47, 0.05);
+  border-color: rgba(211, 47, 47, 0.35);
+}
+
+/* Timestamps */
+.timestamps {
+  font-size: 11px;
+  color: var(--text-secondary);
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+}

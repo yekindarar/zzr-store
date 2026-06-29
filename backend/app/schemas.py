@@ -61,6 +61,7 @@ class CreateOrderRequest(BaseModel):
 
 class UpdateOrderStatusRequest(BaseModel):
     status: str
+    tracking_number: Optional[str] = None
 
 
 class CreateProductRequest(BaseModel):

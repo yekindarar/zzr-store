@@ -12,10 +12,11 @@ interface OrderContextType {
     shipping: { name: string; phone: string; address: string; city: string; zip: string };
     paymentMethod: string;
   }) => Promise<string>;
+  confirmDelivery: (orderId: string) => Promise<void>;
   adminOrders: Order[];
   adminLoading: boolean;
   refreshAdminOrders: () => Promise<void>;
-  updateOrderStatus: (orderId: string, status: string) => Promise<void>;
+  updateOrderStatus: (orderId: string, status: string, trackingNumber?: string) => Promise<void>;
 }
 
 const OrderContext = createContext<OrderContextType | null>(null);
@@ -69,14 +70,19 @@ export function OrderProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const updateOrderStatus = async (orderId: string, status: string) => {
-    await adminApi.updateOrderStatus(orderId, status);
+  const updateOrderStatus = async (orderId: string, status: string, trackingNumber?: string) => {
+    await adminApi.updateOrderStatus(orderId, status, trackingNumber);
     await refreshAdminOrders();
+  };
+
+  const confirmDelivery = async (orderId: string) => {
+    await userApi.confirmDelivery(orderId);
+    await refreshOrders();
   };
 
   return (
     <OrderContext.Provider value={{
-      orders, loading, refreshOrders, createOrder,
+      orders, loading, refreshOrders, createOrder, confirmDelivery,
       adminOrders, adminLoading, refreshAdminOrders, updateOrderStatus,
     }}>
       {children}

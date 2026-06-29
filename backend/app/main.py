@@ -240,7 +240,21 @@ def create_order(req: CreateOrderRequest, authorization: str = Header(None), db:
 def get_my_orders(authorization: str = Header(None), db: Session = Depends(get_db)):
     user = get_current_user(authorization, db)
     orders = db.query(Order).filter(Order.user_id == user.id).order_by(Order.created_at.desc()).all()
-    return {"orders": [{"id": o.id, "items": o.items, "total": o.total, "status": o.status.value, "shipping": {"name": o.shipping_name, "phone": o.shipping_phone, "address": o.shipping_address, "city": o.shipping_city, "zip": o.shipping_zip}, "payment_method": o.payment_method, "created_at": o.created_at.isoformat()} for o in orders]}
+    return {"orders": [{"id": o.id, "items": o.items, "total": o.total, "status": o.status.value, "tracking_number": o.tracking_number, "shipping": {"name": o.shipping_name, "phone": o.shipping_phone, "address": o.shipping_address, "city": o.shipping_city, "zip": o.shipping_zip}, "payment_method": o.payment_method, "created_at": o.created_at.isoformat(), "updated_at": o.updated_at.isoformat() if o.updated_at else None} for o in orders]}
+
+
+@app.put("/api/orders/{order_id}/confirm-delivery")
+def confirm_delivery(order_id: str, authorization: str = Header(None), db: Session = Depends(get_db)):
+    user = get_current_user(authorization, db)
+    order = db.query(Order).filter(Order.id == order_id, Order.user_id == user.id).first()
+    if not order:
+        raise HTTPException(404, "订单不存在")
+    if order.status != OrderStatus.shipped:
+        raise HTTPException(400, "仅已发货的订单可以确认收货")
+    order.status = OrderStatus.delivered
+    order.updated_at = datetime.now(timezone.utc)
+    db.commit()
+    return {"message": "已确认收货"}
 
 
 # ==================== 管理员 - 订单管理 ====================
@@ -248,7 +262,7 @@ def get_my_orders(authorization: str = Header(None), db: Session = Depends(get_d
 @app.get("/api/admin/orders")
 def admin_list_orders(_=Depends(require_admin), db: Session = Depends(get_db)):
     orders = db.query(Order).order_by(Order.created_at.desc()).all()
-    return {"orders": [{"id": o.id, "user_id": o.user_id, "items": o.items, "total": o.total, "status": o.status.value, "shipping": {"name": o.shipping_name, "phone": o.shipping_phone, "address": o.shipping_address, "city": o.shipping_city, "zip": o.shipping_zip}, "payment_method": o.payment_method, "created_at": o.created_at.isoformat()} for o in orders]}
+    return {"orders": [{"id": o.id, "user_id": o.user_id, "items": o.items, "total": o.total, "status": o.status.value, "tracking_number": o.tracking_number, "shipping": {"name": o.shipping_name, "phone": o.shipping_phone, "address": o.shipping_address, "city": o.shipping_city, "zip": o.shipping_zip}, "payment_method": o.payment_method, "created_at": o.created_at.isoformat(), "updated_at": o.updated_at.isoformat() if o.updated_at else None} for o in orders]}
 
 
 @app.put("/api/admin/orders/{order_id}/status")
@@ -257,6 +271,9 @@ def admin_update_order_status(order_id: str, req: UpdateOrderStatusRequest, _=De
     if not order:
         raise HTTPException(404, "订单不存在")
     order.status = OrderStatus(req.status)
+    if req.tracking_number:
+        order.tracking_number = req.tracking_number
+    order.updated_at = datetime.now(timezone.utc)
     db.commit()
     return {"message": "状态已更新"}
 

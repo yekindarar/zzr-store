@@ -15,14 +15,23 @@ const statusStyles: Record<string, string> = {
   cancelled: styles.statusCancelled,
 };
 
+const statusDesc: Record<string, string> = {
+  pending: '订单已创建，等待付款',
+  paid: '已付款，等待商家发货',
+  shipped: '商品正在运输中',
+  delivered: '已确认收货',
+  cancelled: '订单已取消',
+};
+
 export default function Account() {
   const navigate = useNavigate();
   const { user, logout, updateProfile } = useAuth();
-  const { orders, loading, refreshOrders } = useOrders();
+  const { orders, loading, refreshOrders, confirmDelivery } = useOrders();
   const [tab, setTab] = useState<'profile' | 'orders'>('profile');
   const [name, setName] = useState(user?.name || '');
   const [phone, setPhone] = useState(user?.phone || '');
   const [saved, setSaved] = useState(false);
+  const [confirmingId, setConfirmingId] = useState<string | null>(null);
 
   useEffect(() => { refreshOrders(); }, []);
 
@@ -55,6 +64,18 @@ export default function Account() {
     navigate('/');
   };
 
+  const handleConfirmDelivery = async (orderId: string) => {
+    setConfirmingId(orderId);
+    try {
+      await confirmDelivery(orderId);
+    } finally {
+      setConfirmingId(null);
+    }
+  };
+
+  // Progress steps for visual indicator
+  const progressSteps = ['pending', 'paid', 'shipped', 'delivered'];
+
   return (
     <div className={styles.page}>
       <div className={styles.inner}>
@@ -86,24 +107,91 @@ export default function Account() {
                 {!loading && orders.length === 0 && (
                   <div className={styles.empty}><p>暂无订单</p></div>
                 )}
-                {orders.map((order: any) => (
-                  <div key={order.id} className={styles.orderCard}>
-                    <div className={styles.orderHeader}>
-                      <span className={styles.orderId}>{order.id}</span>
-                      <span className={`${styles.orderStatus} ${statusStyles[order.status]}`}>{statusLabels[order.status]}</span>
-                    </div>
-                    <div className={styles.orderItems}>
-                      {order.items.map((item: any, i: number) => (
-                        <div key={i} className={styles.orderItem}>
-                          <span className={styles.orderItemName}>{item.productName}</span>
-                          <span className={styles.orderItemMeta}>x{item.quantity} · ¥{item.price * item.quantity}</span>
+                {orders.map((order: any) => {
+                  const stepIdx = progressSteps.indexOf(order.status);
+                  return (
+                    <div key={order.id} className={styles.orderCard}>
+                      <div className={styles.orderHeader}>
+                        <div>
+                          <span className={styles.orderId}>{order.id}</span>
+                          <span style={{ marginLeft: 12, fontSize: 12, color: 'var(--text-secondary)' }}>
+                            {new Date(order.created_at).toLocaleDateString('zh-CN')}
+                          </span>
                         </div>
-                      ))}
+                        <span className={`${styles.orderStatus} ${statusStyles[order.status]}`}>
+                          {statusLabels[order.status]}
+                        </span>
+                      </div>
+
+                      {/* Progress bar */}
+                      {order.status !== 'cancelled' && (
+                        <div className={styles.orderProgress}>
+                          {progressSteps.map((step, i) => {
+                            const isActive = i <= stepIdx;
+                            const isCurrent = i === stepIdx;
+                            return (
+                              <div key={step} className={styles.orderStep}>
+                                <div className={`${styles.stepDot} ${isActive ? styles.stepDotActive : ''} ${isCurrent ? styles.stepDotCurrent : ''}`}>
+                                  {isActive && !isCurrent && '✓'}
+                                </div>
+                                <span className={`${styles.stepLabel} ${isActive ? styles.stepLabelActive : ''}`}>
+                                  {statusLabels[step]}
+                                </span>
+                                {i < progressSteps.length - 1 && (
+                                  <div className={`${styles.stepLine} ${i < stepIdx ? styles.stepLineActive : ''}`} />
+                                )}
+                              </div>
+                            );
+                          })}
+                        </div>
+                      )}
+
+                      {/* Status description */}
+                      <p className={styles.orderStatusDesc}>{statusDesc[order.status]}</p>
+
+                      {/* Tracking number (for shipped/delivered) */}
+                      {order.tracking_number && (
+                        <div className={styles.orderTracking}>
+                          <span className={styles.trackingLabel}>快递单号</span>
+                          <span className={styles.trackingValue}>{order.tracking_number}</span>
+                        </div>
+                      )}
+
+                      <div className={styles.orderItems}>
+                        {order.items.map((item: any, i: number) => (
+                          <div key={i} className={styles.orderItem}>
+                            <div className={styles.orderItemInfo}>
+                              <span className={styles.orderItemName}>{item.productName}</span>
+                              {item.color && (
+                                <span className={styles.orderItemColor}>
+                                  <span className={styles.miniColorDot} style={{ background: item.color }} />
+                                </span>
+                              )}
+                            </div>
+                            <span className={styles.orderItemMeta}>x{item.quantity} · ¥{item.price * item.quantity}</span>
+                          </div>
+                        ))}
+                      </div>
+
+                      <div className={styles.orderShipping}>
+                        {order.shipping?.name} · {order.shipping?.phone} · {order.shipping?.address}
+                      </div>
+
+                      <div className={styles.orderTotal}>合计 ¥{order.total}</div>
+
+                      {/* Confirm delivery button */}
+                      {order.status === 'shipped' && (
+                        <button
+                          className={styles.confirmBtn}
+                          onClick={() => handleConfirmDelivery(order.id)}
+                          disabled={confirmingId === order.id}
+                        >
+                          {confirmingId === order.id ? '处理中...' : '确认收货'}
+                        </button>
+                      )}
                     </div>
-                    <div className={styles.orderTotal}>合计 ¥{order.total}</div>
-                    <div className={styles.orderDate}>{new Date(order.created_at).toLocaleDateString('zh-CN')}</div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             )}
           </div>
