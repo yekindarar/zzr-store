@@ -6,19 +6,20 @@ import styles from './Account.module.css';
 
 const statusLabels: Record<string, string> = {
   pending: '待付款', paid: '已付款', shipped: '已发货',
-  delivered: '已送达', cancelled: '已取消',
+  shipping: '运输中', delivered: '已送达', cancelled: '已取消',
 };
 
 const statusStyles: Record<string, string> = {
   pending: styles.statusPending, paid: styles.statusPaid,
-  shipped: styles.statusShipped, delivered: styles.statusDelivered,
-  cancelled: styles.statusCancelled,
+  shipped: styles.statusShipped, shipping: styles.statusShipping,
+  delivered: styles.statusDelivered, cancelled: styles.statusCancelled,
 };
 
 const statusDesc: Record<string, string> = {
   pending: '订单已创建，等待付款',
   paid: '已付款，等待商家发货',
-  shipped: '商品正在运输中',
+  shipped: '已发货，等待揽收',
+  shipping: '商品正在运输中',
   delivered: '已确认收货',
   cancelled: '订单已取消',
 };
@@ -74,7 +75,7 @@ export default function Account() {
   };
 
   // Progress steps for visual indicator
-  const progressSteps = ['pending', 'paid', 'shipped', 'delivered'];
+  const progressSteps = ['pending', 'paid', 'shipped', 'shipping', 'delivered'];
 
   return (
     <div className={styles.page}>
@@ -179,8 +180,8 @@ export default function Account() {
 
                       <div className={styles.orderTotal}>合计 ¥{order.total}</div>
 
-                      {/* Confirm delivery button */}
-                      {order.status === 'shipped' && (
+                      {/* Confirm delivery button — shown during shipping */}
+                      {order.status === 'shipping' && (
                         <button
                           className={styles.confirmBtn}
                           onClick={() => handleConfirmDelivery(order.id)}

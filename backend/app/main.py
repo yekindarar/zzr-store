@@ -249,8 +249,8 @@ def confirm_delivery(order_id: str, authorization: str = Header(None), db: Sessi
     order = db.query(Order).filter(Order.id == order_id, Order.user_id == user.id).first()
     if not order:
         raise HTTPException(404, "订单不存在")
-    if order.status != OrderStatus.shipped:
-        raise HTTPException(400, "仅已发货的订单可以确认收货")
+    if order.status != OrderStatus.shipping:
+        raise HTTPException(400, "仅运输中的订单可以确认收货")
     order.status = OrderStatus.delivered
     order.updated_at = datetime.now(timezone.utc)
     db.commit()
@@ -270,7 +270,22 @@ def admin_update_order_status(order_id: str, req: UpdateOrderStatusRequest, _=De
     order = db.query(Order).filter(Order.id == order_id).first()
     if not order:
         raise HTTPException(404, "订单不存在")
-    order.status = OrderStatus(req.status)
+    
+    # Validate status transition (only forward, except for cancelled which can come from any active state)
+    valid_transitions = {
+        OrderStatus.pending: [OrderStatus.paid, OrderStatus.cancelled],
+        OrderStatus.paid: [OrderStatus.shipped, OrderStatus.cancelled],
+        OrderStatus.shipped: [OrderStatus.shipping, OrderStatus.cancelled],
+        OrderStatus.shipping: [OrderStatus.delivered],
+        OrderStatus.delivered: [],
+        OrderStatus.cancelled: [],
+    }
+    new_status = OrderStatus(req.status)
+    allowed = valid_transitions.get(order.status, [])
+    if new_status not in allowed:
+        raise HTTPException(400, f"不允许从 {order.status.value} 转换到 {req.status}")
+    
+    order.status = new_status
     if req.tracking_number:
         order.tracking_number = req.tracking_number
     order.updated_at = datetime.now(timezone.utc)

@@ -20,7 +20,7 @@ export interface Order {
   userId: string;
   items: OrderItem[];
   total: number;
-  status: 'pending' | 'paid' | 'shipped' | 'delivered' | 'cancelled';
+  status: 'pending' | 'paid' | 'shipped' | 'shipping' | 'delivered' | 'cancelled';
   tracking_number: string;
   shipping: {
     name: string;
@@ -31,7 +31,7 @@ export interface Order {
   };
   paymentMethod: string;
   createdAt: string;
-  updatedAt: string;
+  updated_at: string;
 }
 
 export type UserRole = 'user' | 'admin' | 'owner';

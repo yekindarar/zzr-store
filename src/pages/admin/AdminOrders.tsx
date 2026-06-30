@@ -7,6 +7,7 @@ const STATUS_MAP: Record<string, { label: string; className: string }> = {
   pending: { label: '待付款', className: 'pending' },
   paid: { label: '已付款', className: 'paid' },
   shipped: { label: '已发货', className: 'shipped' },
+  shipping: { label: '运输中', className: 'shipping' },
   delivered: { label: '已送达', className: 'delivered' },
   cancelled: { label: '已取消', className: 'cancelled' },
 };
@@ -15,12 +16,13 @@ const STATUS_MAP: Record<string, { label: string; className: string }> = {
 const NEXT_STATUS: Record<string, string | null> = {
   pending: 'paid',
   paid: 'shipped',
-  shipped: 'delivered',
+  shipped: 'shipping',
+  shipping: 'delivered',
   delivered: null,
   cancelled: null,
 };
 
-const PROGRESS_STEPS = ['pending', 'paid', 'shipped', 'delivered'];
+const PROGRESS_STEPS = ['pending', 'paid', 'shipped', 'shipping', 'delivered'];
 
 export default function AdminOrders() {
   const { adminOrders, adminLoading, refreshAdminOrders, updateOrderStatus } = useOrders();
@@ -51,7 +53,8 @@ export default function AdminOrders() {
     { key: 'all', label: '全部' },
     { key: 'pending', label: '待付款' },
     { key: 'paid', label: '待发货' },
-    { key: 'shipped', label: '运输中' },
+    { key: 'shipped', label: '已发货' },
+    { key: 'shipping', label: '运输中' },
     { key: 'delivered', label: '已送达' },
     { key: 'cancelled', label: '已取消' },
   ];
@@ -179,8 +182,8 @@ export default function AdminOrders() {
                     </div>
                   </div>
 
-                  {/* Tracking number (shown when shipped/delivered) */}
-                  {(order.status === 'shipped' || order.status === 'delivered') && order.tracking_number && (
+                  {/* Tracking number (shown when shipped/shipping/delivered) */}
+                  {(order.status === 'shipped' || order.status === 'shipping' || order.status === 'delivered') && order.tracking_number && (
                     <div className={styles.trackingSection}>
                       <span className={styles.metaLabel}>快递单号</span>
                       <span className={styles.trackingNumber}>{order.tracking_number}</span>
@@ -190,7 +193,7 @@ export default function AdminOrders() {
                   {/* Action buttons */}
                   {order.status !== 'delivered' && order.status !== 'cancelled' && (
                     <div className={styles.actions}>
-                      {/* Show tracking input when transitioning to shipped */}
+                      {/* Show tracking input when transitioning to shipped (from paid) */}
                       {next === 'shipped' && (
                         <div className={styles.trackingInput}>
                           <input
@@ -211,7 +214,8 @@ export default function AdminOrders() {
                           >
                             {next === 'paid' && '标记为已付款'}
                             {next === 'shipped' && '发货'}
-                            {next === 'delivered' && '标记为已送达'}
+                            {next === 'shipping' && '标记为运输中'}
+                            {next === 'delivered' && '确认已送达'}
                           </button>
                         )}
                         {canCancel && (
