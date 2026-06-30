@@ -16,7 +16,6 @@ interface OrderContextType {
   payOrder: (orderId: string) => Promise<{ pay_type: string; qrcode: string; out_trade_no: string; total_fee: string; message?: string }>;
   mockPay: (orderId: string) => Promise<{ message: string; status: string }>;
   getOrderStatus: (orderId: string) => Promise<{ id: string; status: string; tracking_number: string | null; updated_at: string | null }>;
-  cancelOrder: (orderId: string) => Promise<void>;
   adminOrders: Order[];
   adminLoading: boolean;
   refreshAdminOrders: () => Promise<void>;
@@ -96,15 +95,10 @@ export function OrderProvider({ children }: { children: ReactNode }) {
     return await userApi.getOrderStatus(orderId);
   };
 
-  const cancelOrder = async (orderId: string) => {
-    await userApi.cancelOrder(orderId);
-    await refreshOrders();
-  };
-
   return (
     <OrderContext.Provider value={{
       orders, loading, refreshOrders, createOrder, confirmDelivery,
-      payOrder, mockPay, getOrderStatus, cancelOrder,
+      payOrder, mockPay, getOrderStatus,
       adminOrders, adminLoading, refreshAdminOrders, updateOrderStatus,
     }}>
       {children}
