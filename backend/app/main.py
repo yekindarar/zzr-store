@@ -17,7 +17,7 @@ from .schemas import (
 )
 from .email_utils import send_verification_code, verify_code
 from . import config
-from .payjs import native_pay, check_pay, is_configured as payjs_configured
+from .yungouos import native_pay, query_order, is_configured as yungouos_configured
 
 # --- 配置 ---
 JWT_SECRET = "zzr-store-jwt-secret-2026"
@@ -25,10 +25,10 @@ JWT_ALGORITHM = "HS256"
 JWT_EXPIRE_DAYS = 30
 # ---
 
-# PayJS 配置覆盖
-config.PAYJS_MCHID = os.environ.get("PAYJS_MCHID", "")
-config.PAYJS_KEY = os.environ.get("PAYJS_KEY", "")
-config.PAYJS_NOTIFY_URL = os.environ.get("PAYJS_NOTIFY_URL", "")
+# YunGouOS 配置覆盖
+config.YUNGOUOS_MCHID = os.environ.get("YUNGOUOS_MCHID", "")
+config.YUNGOUOS_KEY = os.environ.get("YUNGOUOS_KEY", "")
+config.YUNGOUOS_NOTIFY_URL = os.environ.get("YUNGOUOS_NOTIFY_URL", "")
 # ---
 
 Base.metadata.create_all(bind=engine)
@@ -368,24 +368,24 @@ def pay_order(order_id: str, authorization: str = Header(None), db: Session = De
     
     total_fen = int(order.total * 100)  # 元转分
     
-    if payjs_configured():
-        # 真实 PayJS 支付
+    if yungouos_configured():
+        # 真实 YunGouOS 支付
         result = native_pay(
             total_fee=total_fen,
             out_trade_no=order.id,
             body=f"ZZR Store - {order.id}",
             attach=order.id,
         )
-        if result and result.get("return_code") == 1:
+        if result and result.get("code") == 0:
+            data = result.get("data", {})
             return {
-                "pay_type": "payjs",
-                "qrcode": result.get("qrcode", ""),
-                "payjs_order_id": result.get("payjs_order_id", ""),
+                "pay_type": "yungouos",
+                "qrcode": data.get("code_url", ""),
                 "out_trade_no": order.id,
                 "total_fee": str(total_fen),
             }
         else:
-            msg = result.get("return_msg", "支付发起失败") if result else "支付服务不可用"
+            msg = result.get("msg", "支付发起失败") if result else "支付服务不可用"
             raise HTTPException(502, msg)
     else:
         # 模拟支付
@@ -432,18 +432,16 @@ def get_order_status(order_id: str, authorization: str = Header(None), db: Sessi
 @app.post("/api/pay/notify")
 def pay_notify(req: dict):
     """
-    PayJS 异步通知回调
-    用户扫码支付后，PayJS 会 POST 到这里
+    YunGouOS 异步通知回调
+    用户扫码支付后，YunGouOS 会 POST 到这里
     """
     from .database import SessionLocal
-    from .payjs import verify_notify
+    from .yungouos import verify_notify
     
     if not verify_notify(req):
-        return {"return_code": 0, "return_msg": "sign verify fail"}
+        return {"code": -1, "msg": "sign verify fail"}
     
     out_trade_no = req.get("out_trade_no", "")
-    payjs_order_id = req.get("payjs_order_id", "")
-    total_fee = req.get("total_fee", "0")
     status = req.get("status", "0")
     
     if status == "1":
@@ -457,7 +455,7 @@ def pay_notify(req: dict):
         finally:
             db.close()
     
-    return {"return_code": 1, "return_msg": "OK"}
+    return {"code": 0, "msg": "OK"}
 
 
 # ==================== 种子数据 ====================

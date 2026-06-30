@@ -9,7 +9,7 @@ export default function Payment() {
   const location = useLocation();
   const { payOrder, mockPay, getOrderStatus } = useOrders();
 
-  const [payType, setPayType] = useState<'mock' | 'payjs'>('mock');
+  const [payType, setPayType] = useState<'mock' | 'yungouos'>('mock');
   const [qrcode, setQrcode] = useState('');
   const [loading, setLoading] = useState(true);
   const [paying, setPaying] = useState(false);
@@ -29,7 +29,7 @@ export default function Payment() {
     setError('');
     try {
       const result = await payOrder(orderId);
-      setPayType(result.pay_type as 'mock' | 'payjs');
+      setPayType(result.pay_type as 'mock' | 'yungouos');
       if (result.qrcode) {
         setQrcode(result.qrcode);
       }
@@ -50,9 +50,9 @@ export default function Payment() {
     // 自动弹出一个"确认支付"按钮，用户点击后调用 mockPay
   }, [payType, paid]);
 
-  // 轮询订单状态（PayJS 模式用）
+  // 轮询订单状态（YunGouOS 模式用）
   useEffect(() => {
-    if (payType !== 'payjs' || paid || !orderId) return;
+    if (payType !== 'yungouos' || paid || !orderId) return;
 
     const interval = setInterval(async () => {
       try {
@@ -151,11 +151,11 @@ export default function Payment() {
 
         {/* 支付方式标签 */}
         <div className={styles.payTypeTag}>
-          {payType === 'payjs' ? '微信支付 / 支付宝' : '模拟支付'}
+          {payType === 'yungouos' ? '微信支付 / 支付宝' : '模拟支付'}
         </div>
 
-        {/* PayJS 二维码 */}
-        {payType === 'payjs' && qrcode && (
+        {/* YunGouOS 二维码 */}
+        {payType === 'yungouos' && qrcode && (
           <div className={styles.qrcodeArea}>
             <div className={styles.qrcodeLabel}>请使用微信或支付宝扫码支付</div>
             <img
@@ -169,8 +169,8 @@ export default function Payment() {
           </div>
         )}
 
-        {/* PayJS 无二维码 */}
-        {payType === 'payjs' && !qrcode && (
+        {/* YunGouOS 无二维码 */}
+        {payType === 'yungouos' && !qrcode && (
           <div className={styles.qrcodeArea}>
             <div className={styles.qrcodeLabel}>正在获取支付二维码...</div>
             <div className={styles.qrcodePlaceholder}>
