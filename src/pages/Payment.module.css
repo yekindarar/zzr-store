@@ -207,6 +207,44 @@
   background: #333;
 }
 
+.cancelBtn {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  background: transparent;
+  color: #999;
+  border: 1px solid #eee;
+  border-radius: 10px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 12px;
+}
+
+.cancelBtn:hover {
+  border-color: #dc2626;
+  color: #dc2626;
+}
+
+.cancelBtn:disabled {
+  color: #ddd;
+  border-color: #eee;
+  cursor: not-allowed;
+}
+
+.cancelledTitle {
+  font-size: 22px;
+  font-weight: 600;
+  margin: 0 0 12px;
+  color: #1a1a1a;
+}
+
+.cancelledDesc {
+  font-size: 14px;
+  color: #888;
+  margin-bottom: 24px;
+}
+
 .error {
   background: #fef2f2;
   color: #dc2626;

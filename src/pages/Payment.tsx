@@ -8,11 +8,12 @@ export default function Payment() {
   const { orderId } = useParams<{ orderId: string }>();
   const navigate = useNavigate();
   const location = useLocation();
-  const { mockPay } = useOrders();
+  const { mockPay, cancelOrder } = useOrders();
   const { clearCart } = useCart();
 
   const [paying, setPaying] = useState(false);
   const [paid, setPaid] = useState(false);
+  const [cancelled, setCancelled] = useState(false);
   const [error, setError] = useState('');
   const [countdown, setCountdown] = useState(0);
 
@@ -36,6 +37,36 @@ export default function Payment() {
       setPaying(false);
     }
   };
+
+  // 取消订单
+  const handleCancel = async () => {
+    if (!orderId) return;
+    if (!window.confirm('确定要取消这个订单吗？')) return;
+    setPaying(true);
+    setError('');
+    try {
+      await cancelOrder(orderId);
+      setCancelled(true);
+    } catch (e: any) {
+      setError(e.message || '取消失败');
+    } finally {
+      setPaying(false);
+    }
+  };
+
+  if (cancelled) {
+    return (
+      <div className={styles.container}>
+        <div className={styles.card}>
+          <h2 className={styles.cancelledTitle}>订单已取消</h2>
+          <p className={styles.cancelledDesc}>订单 {orderId} 已成功取消</p>
+          <button className={styles.btn} onClick={() => navigate('/cart', { replace: true })}>
+            返回购物车
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   // 支付成功倒计时跳转
   useEffect(() => {
@@ -136,12 +167,13 @@ export default function Payment() {
         {/* 错误提示 */}
         {error && <div className={styles.error}>{error}</div>}
 
-        {/* 返回按钮 */}
+        {/* 取消订单 */}
         <button
-          className={styles.backBtn}
-          onClick={() => navigate(-1)}
+          className={styles.cancelBtn}
+          onClick={handleCancel}
+          disabled={paying}
         >
-          返回
+          取消订单
         </button>
       </div>
     </div>
