@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { useOrders } from '../context/OrderContext';
+import { useCart } from '../context/CartContext';
 import styles from './Payment.module.css';
 
 export default function Payment() {
@@ -8,6 +9,7 @@ export default function Payment() {
   const navigate = useNavigate();
   const location = useLocation();
   const { mockPay } = useOrders();
+  const { clearCart } = useCart();
 
   const [paying, setPaying] = useState(false);
   const [paid, setPaid] = useState(false);
@@ -26,6 +28,7 @@ export default function Payment() {
     setError('');
     try {
       await mockPay(orderId);
+      clearCart();
       setPaid(true);
     } catch (e: any) {
       setError(e.message || '操作失败，请重试');

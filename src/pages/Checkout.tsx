@@ -6,7 +6,7 @@ import { useOrders } from '../context/OrderContext';
 import styles from './Checkout.module.css';
 
 export default function Checkout() {
-  const { items, totalPrice, clearCart } = useCart();
+  const { items, totalPrice } = useCart();
   const { user } = useAuth();
   const { createOrder } = useOrders();
   const navigate = useNavigate();
@@ -59,7 +59,7 @@ export default function Checkout() {
       });
       setOrderId(id);
       setSubmitted(true);
-      clearCart();
+      // 购物车在支付成功后才清空，避免用户返回后丢失
     } catch {
       alert('提交订单失败，请稍后重试');
     } finally {
