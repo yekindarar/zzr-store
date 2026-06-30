@@ -57,18 +57,8 @@
   color: #c0392b;
 }
 
-.payTypeTag {
-  display: inline-block;
-  background: #eef2ff;
-  color: #4f46e5;
-  font-size: 13px;
-  padding: 4px 14px;
-  border-radius: 20px;
-  margin-bottom: 24px;
-}
-
 .qrcodeArea {
-  margin-bottom: 24px;
+  margin-bottom: 20px;
 }
 
 .qrcodeLabel {
@@ -77,53 +67,53 @@
   margin-bottom: 16px;
 }
 
+.qrcodeWrapper {
+  position: relative;
+}
+
 .qrcode {
-  width: 200px;
-  height: 200px;
+  width: 220px;
+  height: 220px;
   border: 2px solid #eee;
   border-radius: 12px;
   display: block;
   margin: 0 auto;
 }
 
-.qrcodePlaceholder {
-  width: 200px;
-  height: 200px;
+.qrcodeFallback {
+  width: 220px;
+  height: 220px;
   border: 2px dashed #ddd;
   border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 0 auto;
+  color: #999;
+  font-size: 14px;
+}
+
+.hidden {
+  display: none !important;
 }
 
 .qrcodeHint {
-  font-size: 12px;
+  font-size: 13px;
   color: #999;
   margin-top: 12px;
+  line-height: 1.5;
 }
 
-.spinner {
-  width: 32px;
-  height: 32px;
-  border: 3px solid #eee;
-  border-top-color: #4f46e5;
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
+.confirmArea {
+  margin-bottom: 16px;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
 }
 
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
-.mockArea {
-  margin-bottom: 24px;
-}
-
-.mockHint {
+.confirmHint {
   font-size: 14px;
   color: #888;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 }
 
 .payBtn {
@@ -146,6 +136,12 @@
 .payBtn:disabled {
   background: #ccc;
   cursor: not-allowed;
+}
+
+.confirmNote {
+  font-size: 12px;
+  color: #aaa;
+  margin-top: 10px;
 }
 
 .backBtn {
@@ -191,7 +187,7 @@
 .successDesc {
   font-size: 14px;
   color: #888;
-  margin-bottom: 24px;
+  margin-bottom: 8px;
 }
 
 .btn {
@@ -204,16 +200,11 @@
   font-weight: 500;
   cursor: pointer;
   transition: background 0.2s;
+  margin-top: 16px;
 }
 
 .btn:hover {
   background: #333;
-}
-
-.loading {
-  font-size: 16px;
-  color: #888;
-  padding: 40px 0;
 }
 
 .error {
@@ -236,5 +227,10 @@
 
   .totalAmount {
     font-size: 20px;
+  }
+
+  .qrcode {
+    width: 180px;
+    height: 180px;
   }
 }
