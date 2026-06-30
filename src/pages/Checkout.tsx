@@ -21,6 +21,7 @@ export default function Checkout() {
   const [city, setCity] = useState('');
   const [zip, setZip] = useState('');
   const [payment, setPayment] = useState('微信支付');
+  const [payState, setPayState] = useState<{ total: number; items: any[] } | null>(null);
 
   useEffect(() => { setVisible(true); }, []);
 
@@ -44,6 +45,18 @@ export default function Checkout() {
         paymentMethod: payment,
       });
 
+      // 先保存支付页需要的数据，再清空购物车
+      setPayState({
+        total: totalPrice,
+        items: items.map((item) => ({
+          productId: item.product.id,
+          productName: item.product.name,
+          price: item.product.price,
+          quantity: item.quantity,
+          color: item.color,
+          image: item.product.image,
+        })),
+      });
       setOrderId(id);
       setSubmitted(true);
       clearCart();
@@ -62,25 +75,15 @@ export default function Checkout() {
     return <Navigate to="/cart" replace />;
   }
 
-  // 提交成功后跳转到支付页面
+  // 提交成功后跳转到支付页面（使用提前保存的数据，避免 clearCart 后丢失）
   useEffect(() => {
-    if (submitted && orderId) {
+    if (submitted && orderId && payState) {
       navigate(`/payment/${orderId}`, {
         replace: true,
-        state: {
-          total: totalPrice,
-          items: items.map((item) => ({
-            productId: item.product.id,
-            productName: item.product.name,
-            price: item.product.price,
-            quantity: item.quantity,
-            color: item.color,
-            image: item.product.image,
-          })),
-        },
+        state: payState,
       });
     }
-  }, [submitted, orderId]);
+  }, [submitted, orderId, payState]);
 
   return (
     <div className={`${styles.page} ${visible ? styles.visible : ''}`}>
