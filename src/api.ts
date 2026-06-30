@@ -77,6 +77,21 @@ export const userApi = {
     request<{ message: string }>(`/api/orders/${orderId}/confirm-delivery`, {
       method: 'PUT',
     }),
+
+  payOrder: (orderId: string) =>
+    request<{ pay_type: string; qrcode: string; out_trade_no: string; total_fee: string; message?: string }>(
+      `/api/orders/${orderId}/pay`, { method: 'POST' }
+    ),
+
+  mockPay: (orderId: string) =>
+    request<{ message: string; status: string }>(`/api/orders/${orderId}/mock-pay`, {
+      method: 'POST',
+    }),
+
+  getOrderStatus: (orderId: string) =>
+    request<{ id: string; status: string; tracking_number: string | null; updated_at: string | null }>(
+      `/api/orders/${orderId}/status`
+    ),
 };
 
 // === Admin ===

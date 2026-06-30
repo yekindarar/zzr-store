@@ -62,23 +62,25 @@ export default function Checkout() {
     return <Navigate to="/cart" replace />;
   }
 
-  if (submitted) {
-    return (
-      <div className={`${styles.page} ${visible ? styles.visible : ''}`}>
-        <div className="container">
-          <div className={styles.success}>
-            <div className={styles.successIcon}>✓</div>
-            <h2>订单已提交</h2>
-            <p className={styles.orderIdText}>订单号：{orderId}</p>
-            <p>感谢您的购买！我们将尽快处理您的订单。</p>
-            <button className={styles.returnBtn} onClick={() => navigate(user ? '/account' : '/')}>
-              {user ? '查看订单' : '返回首页'}
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  // 提交成功后跳转到支付页面
+  useEffect(() => {
+    if (submitted && orderId) {
+      navigate(`/payment/${orderId}`, {
+        replace: true,
+        state: {
+          total: totalPrice,
+          items: items.map((item) => ({
+            productId: item.product.id,
+            productName: item.product.name,
+            price: item.product.price,
+            quantity: item.quantity,
+            color: item.color,
+            image: item.product.image,
+          })),
+        },
+      });
+    }
+  }, [submitted, orderId]);
 
   return (
     <div className={`${styles.page} ${visible ? styles.visible : ''}`}>

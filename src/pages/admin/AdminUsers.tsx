@@ -61,7 +61,7 @@ export default function AdminUsers() {
 
   const canManage = currentUser?.role === 'owner';
 
-  const handleDelete = async (id: string, email: string, role: string) => {
+  const handleDelete = async (id: string, _email: string, role: string) => {
     if (role === 'owner') {
       alert('不能删除老板账号');
       return;

@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
+import { createContext, useContext, useState, type ReactNode } from 'react';
 import type { Order } from '../types';
 import { userApi, adminApi } from '../api';
 
@@ -13,6 +13,9 @@ interface OrderContextType {
     paymentMethod: string;
   }) => Promise<string>;
   confirmDelivery: (orderId: string) => Promise<void>;
+  payOrder: (orderId: string) => Promise<{ pay_type: string; qrcode: string; out_trade_no: string; total_fee: string; message?: string }>;
+  mockPay: (orderId: string) => Promise<{ message: string; status: string }>;
+  getOrderStatus: (orderId: string) => Promise<{ id: string; status: string; tracking_number: string | null; updated_at: string | null }>;
   adminOrders: Order[];
   adminLoading: boolean;
   refreshAdminOrders: () => Promise<void>;
@@ -80,9 +83,22 @@ export function OrderProvider({ children }: { children: ReactNode }) {
     await refreshOrders();
   };
 
+  const payOrder = async (orderId: string) => {
+    return await userApi.payOrder(orderId);
+  };
+
+  const mockPay = async (orderId: string) => {
+    return await userApi.mockPay(orderId);
+  };
+
+  const getOrderStatus = async (orderId: string) => {
+    return await userApi.getOrderStatus(orderId);
+  };
+
   return (
     <OrderContext.Provider value={{
       orders, loading, refreshOrders, createOrder, confirmDelivery,
+      payOrder, mockPay, getOrderStatus,
       adminOrders, adminLoading, refreshAdminOrders, updateOrderStatus,
     }}>
       {children}

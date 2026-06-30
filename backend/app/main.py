@@ -5,6 +5,7 @@ from datetime import datetime, timedelta, timezone
 from jose import jwt, JWTError
 import hashlib, secrets
 
+import os
 from .database import engine, Base, get_db
 from .models import User, Order, Product, UserRole, OrderStatus
 from .schemas import (
@@ -15,11 +16,19 @@ from .schemas import (
     RegisterWithCodeRequest,
 )
 from .email_utils import send_verification_code, verify_code
+from . import config
+from .payjs import native_pay, check_pay, is_configured as payjs_configured
 
 # --- 配置 ---
 JWT_SECRET = "zzr-store-jwt-secret-2026"
 JWT_ALGORITHM = "HS256"
 JWT_EXPIRE_DAYS = 30
+# ---
+
+# PayJS 配置覆盖
+config.PAYJS_MCHID = os.environ.get("PAYJS_MCHID", "")
+config.PAYJS_KEY = os.environ.get("PAYJS_KEY", "")
+config.PAYJS_NOTIFY_URL = os.environ.get("PAYJS_NOTIFY_URL", "")
 # ---
 
 Base.metadata.create_all(bind=engine)
@@ -340,6 +349,115 @@ def admin_delete_product(product_id: str, _=Depends(require_admin), db: Session 
     db.delete(product)
     db.commit()
     return {"message": "已删除"}
+
+
+# ==================== 支付 ====================
+
+@app.post("/api/orders/{order_id}/pay")
+def pay_order(order_id: str, authorization: str = Header(None), db: Session = Depends(get_db)):
+    """
+    发起支付
+    返回 PayJS 二维码链接（已配置时）或模拟支付二维码（未配置时）
+    """
+    user = get_current_user(authorization, db)
+    order = db.query(Order).filter(Order.id == order_id, Order.user_id == user.id).first()
+    if not order:
+        raise HTTPException(404, "订单不存在")
+    if order.status != OrderStatus.pending:
+        raise HTTPException(400, "订单状态不允许支付")
+    
+    total_fen = int(order.total * 100)  # 元转分
+    
+    if payjs_configured():
+        # 真实 PayJS 支付
+        result = native_pay(
+            total_fee=total_fen,
+            out_trade_no=order.id,
+            body=f"ZZR Store - {order.id}",
+            attach=order.id,
+        )
+        if result and result.get("return_code") == 1:
+            return {
+                "pay_type": "payjs",
+                "qrcode": result.get("qrcode", ""),
+                "payjs_order_id": result.get("payjs_order_id", ""),
+                "out_trade_no": order.id,
+                "total_fee": str(total_fen),
+            }
+        else:
+            msg = result.get("return_msg", "支付发起失败") if result else "支付服务不可用"
+            raise HTTPException(502, msg)
+    else:
+        # 模拟支付
+        return {
+            "pay_type": "mock",
+            "qrcode": "",
+            "out_trade_no": order.id,
+            "total_fee": str(total_fen),
+            "message": "模拟支付模式，点击确认完成支付",
+        }
+
+
+@app.post("/api/orders/{order_id}/mock-pay")
+def mock_pay(order_id: str, authorization: str = Header(None), db: Session = Depends(get_db)):
+    """模拟支付：将 pending 订单变为 paid（仅模拟模式可用）"""
+    user = get_current_user(authorization, db)
+    order = db.query(Order).filter(Order.id == order_id, Order.user_id == user.id).first()
+    if not order:
+        raise HTTPException(404, "订单不存在")
+    if order.status != OrderStatus.pending:
+        raise HTTPException(400, "订单状态不允许支付")
+    
+    order.status = OrderStatus.paid
+    order.updated_at = datetime.now(timezone.utc)
+    db.commit()
+    return {"message": "支付成功", "status": "paid"}
+
+
+@app.get("/api/orders/{order_id}/status")
+def get_order_status(order_id: str, authorization: str = Header(None), db: Session = Depends(get_db)):
+    """查询订单状态（供前端轮询）"""
+    user = get_current_user(authorization, db)
+    order = db.query(Order).filter(Order.id == order_id, Order.user_id == user.id).first()
+    if not order:
+        raise HTTPException(404, "订单不存在")
+    return {
+        "id": order.id,
+        "status": order.status.value,
+        "tracking_number": order.tracking_number,
+        "updated_at": order.updated_at.isoformat() if order.updated_at else None,
+    }
+
+
+@app.post("/api/pay/notify")
+def pay_notify(req: dict):
+    """
+    PayJS 异步通知回调
+    用户扫码支付后，PayJS 会 POST 到这里
+    """
+    from .database import SessionLocal
+    from .payjs import verify_notify
+    
+    if not verify_notify(req):
+        return {"return_code": 0, "return_msg": "sign verify fail"}
+    
+    out_trade_no = req.get("out_trade_no", "")
+    payjs_order_id = req.get("payjs_order_id", "")
+    total_fee = req.get("total_fee", "0")
+    status = req.get("status", "0")
+    
+    if status == "1":
+        db = SessionLocal()
+        try:
+            order = db.query(Order).filter(Order.id == out_trade_no).first()
+            if order and order.status == OrderStatus.pending:
+                order.status = OrderStatus.paid
+                order.updated_at = datetime.now(timezone.utc)
+                db.commit()
+        finally:
+            db.close()
+    
+    return {"return_code": 1, "return_msg": "OK"}
 
 
 # ==================== 种子数据 ====================

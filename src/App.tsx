@@ -14,6 +14,7 @@ import Checkout from './pages/Checkout';
 import About from './pages/About';
 import Login from './pages/Login';
 import Account from './pages/Account';
+import Payment from './pages/Payment';
 import AdminLayout from './pages/admin/AdminLayout';
 import AdminDashboard from './pages/admin/Dashboard';
 import AdminProducts from './pages/admin/AdminProducts';
@@ -68,6 +69,7 @@ function AppLayout() {
           <Route path="/about" element={<About />} />
           <Route path="/login" element={<Login />} />
           <Route path="/account" element={<Account />} />
+          <Route path="/payment/:orderId" element={<Payment />} />
         </Routes>
       </main>
       <Footer />
