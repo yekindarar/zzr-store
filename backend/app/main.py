@@ -458,6 +458,22 @@ def pay_notify(req: dict):
     return {"code": 0, "msg": "OK"}
 
 
+@app.put("/api/orders/{order_id}/cancel")
+def cancel_order(order_id: str, authorization: str = Header(None), db: Session = Depends(get_db)):
+    """用户取消自己的待付款订单"""
+    user = get_current_user(authorization, db)
+    order = db.query(Order).filter(Order.id == order_id, Order.user_id == user.id).first()
+    if not order:
+        raise HTTPException(404, "订单不存在")
+    if order.status != OrderStatus.pending:
+        raise HTTPException(400, "只能取消待付款订单")
+    
+    order.status = OrderStatus.cancelled
+    order.updated_at = datetime.now(timezone.utc)
+    db.commit()
+    return {"message": "订单已取消"}
+
+
 # ==================== 种子数据 ====================
 
 @app.on_event("startup")

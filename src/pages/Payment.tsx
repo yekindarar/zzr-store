@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { useOrders } from '../context/OrderContext';
 import { useCart } from '../context/CartContext';
@@ -8,7 +8,7 @@ export default function Payment() {
   const { orderId } = useParams<{ orderId: string }>();
   const navigate = useNavigate();
   const location = useLocation();
-  const { mockPay } = useOrders();
+  const { mockPay, cancelOrder } = useOrders();
   const { clearCart } = useCart();
 
   const [paying, setPaying] = useState(false);
@@ -36,6 +36,21 @@ export default function Payment() {
       setPaying(false);
     }
   };
+
+  // 用户离开支付页时自动取消待付款订单（仅当未支付时）
+  const paidRef = useRef(false);
+  useEffect(() => {
+    if (paid) paidRef.current = true;
+  }, [paid]);
+  useEffect(() => {
+    if (!orderId) return;
+    return () => {
+      // 组件卸载时，如果还没支付则自动取消订单
+      if (!paidRef.current) {
+        cancelOrder(orderId).catch(() => {});
+      }
+    };
+  }, [orderId, cancelOrder]);
 
   // 支付成功倒计时跳转
   useEffect(() => {

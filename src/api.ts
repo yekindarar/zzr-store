@@ -92,6 +92,11 @@ export const userApi = {
     request<{ id: string; status: string; tracking_number: string | null; updated_at: string | null }>(
       `/api/orders/${orderId}/status`
     ),
+
+  cancelOrder: (orderId: string) =>
+    request<{ message: string }>(`/api/orders/${orderId}/cancel`, {
+      method: 'PUT',
+    }),
 };
 
 // === Admin ===
