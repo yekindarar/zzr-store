@@ -19,10 +19,10 @@ from .email_utils import send_verification_code, verify_code
 from . import config
 from .yungouos import native_pay, query_order, is_configured as yungouos_configured
 
-# --- 配置 ---
-JWT_SECRET = "zzr-store-jwt-secret-2026"
+# --- 配置（优先从环境变量读取）---
+JWT_SECRET = os.environ.get("ZZR_JWT_SECRET", "zzr-store-jwt-secret-2026")
 JWT_ALGORITHM = "HS256"
-JWT_EXPIRE_DAYS = 30
+JWT_EXPIRE_DAYS = int(os.environ.get("ZZR_JWT_EXPIRE_DAYS", "30"))
 # ---
 
 # YunGouOS 配置覆盖
@@ -30,6 +30,12 @@ config.YUNGOUOS_MCHID = os.environ.get("YUNGOUOS_MCHID", "")
 config.YUNGOUOS_KEY = os.environ.get("YUNGOUOS_KEY", "")
 config.YUNGOUOS_NOTIFY_URL = os.environ.get("YUNGOUOS_NOTIFY_URL", "")
 # ---
+
+# SMTP 配置（从环境变量覆盖默认值）
+config.SMTP_HOST = os.environ.get("ZZR_SMTP_HOST", config.SMTP_HOST)
+config.SMTP_PORT = int(os.environ.get("ZZR_SMTP_PORT", str(config.SMTP_PORT)))
+config.SMTP_USER = os.environ.get("ZZR_SMTP_USER", config.SMTP_USER)
+config.SMTP_PASS = os.environ.get("ZZR_SMTP_PASS", config.SMTP_PASS)
 
 Base.metadata.create_all(bind=engine)
 

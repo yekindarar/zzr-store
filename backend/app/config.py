@@ -8,6 +8,12 @@ JWT_SECRET = "***"
 JWT_ALGORITHM = "HS256"
 JWT_EXPIRE_DAYS = 30
 
+# ========== SMTP / 邮箱 ==========
+SMTP_HOST = os.environ.get("ZZR_SMTP_HOST", "smtp.126.com")
+SMTP_PORT = int(os.environ.get("ZZR_SMTP_PORT", "25"))
+SMTP_USER = os.environ.get("ZZR_SMTP_USER", "zzr2282328134@126.com")
+SMTP_PASS = os.environ.get("ZZR_SMTP_PASS", "FZwnC37v4xXvHyMR")
+
 # ========== 支付 ==========
 # YunGouOS 配置（留空则自动降级为模拟支付）
 YUNGOUOS_MCHID = os.environ.get("YUNGOUOS_MCHID", "")

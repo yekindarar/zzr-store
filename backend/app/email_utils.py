@@ -3,13 +3,13 @@ import random
 import threading
 from email.mime.text import MIMEText
 from datetime import datetime, timedelta, timezone
+from . import config
 
-# --- CONFIG: 改成你的 126 邮箱 ---
-SMTP_HOST = "smtp.126.com"
-SMTP_PORT = 25
-SMTP_USER = "zzr2282328134@126.com"
-SMTP_PASS = "FZwnC37v4xXvHyMR"
-# ---
+# SMTP 配置（从 config.py 读取，可在环境变量中覆盖）
+SMTP_HOST = getattr(config, 'SMTP_HOST', "smtp.126.com")
+SMTP_PORT = getattr(config, 'SMTP_PORT', 25)
+SMTP_USER = getattr(config, 'SMTP_USER', "zzr2282328134@126.com")
+SMTP_PASS = getattr(config, 'SMTP_PASS', "FZwnC37v4xXvHyMR")
 
 # 验证码存储 { email: { code, expires_at } }
 _codes: dict[str, dict] = {}

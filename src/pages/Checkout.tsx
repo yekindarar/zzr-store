@@ -5,14 +5,33 @@ import { useAuth } from '../context/AuthContext';
 import { useOrders } from '../context/OrderContext';
 import styles from './Checkout.module.css';
 
+const ORDER_KEY = 'zzr-pending-order';
+
+function loadPendingOrder(): { orderId: string; payState: { total: number; items: any[] } } | null {
+  try {
+    const data = sessionStorage.getItem(ORDER_KEY);
+    return data ? JSON.parse(data) : null;
+  } catch {
+    return null;
+  }
+}
+
+function savePendingOrder(orderId: string, payState: { total: number; items: any[] }) {
+  sessionStorage.setItem(ORDER_KEY, JSON.stringify({ orderId, payState }));
+}
+
+function clearPendingOrder() {
+  sessionStorage.removeItem(ORDER_KEY);
+}
+
 export default function Checkout() {
-  const { items, totalPrice } = useCart();
+  const { items, totalPrice, clearCart } = useCart();
   const { user } = useAuth();
   const { createOrder } = useOrders();
   const navigate = useNavigate();
   const [visible, setVisible] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
-  const [orderId, setOrderId] = useState('');
+  const [submitted, setSubmitted] = useState(() => !!loadPendingOrder());
+  const [orderId, setOrderId] = useState(() => loadPendingOrder()?.orderId || '');
   const [submitting, setSubmitting] = useState(false);
 
   const [name, setName] = useState(user?.name || '');
@@ -21,9 +40,21 @@ export default function Checkout() {
   const [city, setCity] = useState('');
   const [zip, setZip] = useState('');
   const [payment, setPayment] = useState('微信支付');
-  const [payState, setPayState] = useState<{ total: number; items: any[] } | null>(null);
+  const [payState, setPayState] = useState<{ total: number; items: any[] } | null>(() => loadPendingOrder()?.payState || null);
 
   useEffect(() => { setVisible(true); }, []);
+
+  // 提交成功后跳转到支付页面（放在组件顶部，确保始终执行）
+  useEffect(() => {
+    if (submitted && orderId && payState) {
+      // 保存到 sessionStorage 防止刷新丢失
+      savePendingOrder(orderId, payState);
+      navigate(`/payment/${orderId}`, {
+        replace: true,
+        state: payState,
+      });
+    }
+  }, [submitted, orderId, payState, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,7 +62,8 @@ export default function Checkout() {
     setSubmitting(true);
 
     try {
-      const id = await createOrder({
+      const payStateData = {
+        total: totalPrice,
         items: items.map((item) => ({
           productId: item.product.id,
           productName: item.product.name,
@@ -40,26 +72,21 @@ export default function Checkout() {
           color: item.color,
           image: item.product.image,
         })),
+      };
+      const id = await createOrder({
+        items: payStateData.items,
         total: totalPrice,
         shipping: { name, phone, address, city, zip },
         paymentMethod: payment,
       });
 
-      // 先保存支付页需要的数据，再清空购物车
-      setPayState({
-        total: totalPrice,
-        items: items.map((item) => ({
-          productId: item.product.id,
-          productName: item.product.name,
-          price: item.product.price,
-          quantity: item.quantity,
-          color: item.color,
-          image: item.product.image,
-        })),
-      });
+      // 先保存到 sessionStorage，再清空购物车
+      savePendingOrder(id, payStateData);
+      clearCart();
+
+      setPayState(payStateData);
       setOrderId(id);
       setSubmitted(true);
-      // 购物车在支付成功后才清空，避免用户返回后丢失
     } catch {
       alert('提交订单失败，请稍后重试');
     } finally {
@@ -71,19 +98,9 @@ export default function Checkout() {
     return <Navigate to="/login" replace />;
   }
 
-  if (items.length === 0 && !submitted) {
+  if (items.length === 0 && !submitted && !orderId) {
     return <Navigate to="/cart" replace />;
   }
-
-  // 提交成功后跳转到支付页面（使用提前保存的数据，避免 clearCart 后丢失）
-  useEffect(() => {
-    if (submitted && orderId && payState) {
-      navigate(`/payment/${orderId}`, {
-        replace: true,
-        state: payState,
-      });
-    }
-  }, [submitted, orderId, payState]);
 
   return (
     <div className={`${styles.page} ${visible ? styles.visible : ''}`}>

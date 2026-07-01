@@ -19,7 +19,7 @@ interface CartContextType {
 
 const CartContext = createContext<CartContextType | null>(null);
 
-const STORAGE_KEY = 'ether-cart';
+const STORAGE_KEY = 'zzr-cart';
 
 function loadCart(): CartItem[] {
   try {

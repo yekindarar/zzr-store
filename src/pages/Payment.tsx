@@ -4,6 +4,21 @@ import { useOrders } from '../context/OrderContext';
 import { useCart } from '../context/CartContext';
 import styles from './Payment.module.css';
 
+const ORDER_KEY = 'zzr-pending-order';
+
+function clearPendingOrder() {
+  sessionStorage.removeItem(ORDER_KEY);
+}
+
+function loadOrderFromStorage(): { total: number; items: any[] } | null {
+  try {
+    const data = sessionStorage.getItem(ORDER_KEY);
+    return data ? JSON.parse(data) : null;
+  } catch {
+    return null;
+  }
+}
+
 export default function Payment() {
   const { orderId } = useParams<{ orderId: string }>();
   const navigate = useNavigate();
@@ -16,8 +31,10 @@ export default function Payment() {
   const [error, setError] = useState('');
   const [countdown, setCountdown] = useState(0);
 
-  // 从 location state 获取订单信息
-  const orderInfo = (location.state as any) || {};
+  // 从 location state 或 sessionStorage 获取订单信息（支持刷新）
+  const stateFromNav = (location.state as any) || {};
+  const storage = loadOrderFromStorage();
+  const orderInfo = stateFromNav.total ? stateFromNav : (storage || {});
   const total = orderInfo.total || 0;
   const items = orderInfo.items || [];
 
@@ -29,6 +46,7 @@ export default function Payment() {
     try {
       await mockPay(orderId);
       clearCart();
+      clearPendingOrder();
       setPaid(true);
     } catch (e: any) {
       setError(e.message || '操作失败，请重试');
@@ -37,16 +55,24 @@ export default function Payment() {
     }
   };
 
-  // 用户离开支付页时自动取消待付款订单（仅当未支付时）
+  // 用户离开支付页时自动取消待付款订单（仅当未支付时且不是刷新/导航）
   const paidRef = useRef(false);
   useEffect(() => {
     if (paid) paidRef.current = true;
   }, [paid]);
+
+  const cancelledRef = useRef(false);
   useEffect(() => {
     if (!orderId) return;
+    const handleBeforeUnload = () => {
+      // 页面关闭/刷新时不自动取消（后端保留订单）
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
     return () => {
-      // 组件卸载时，如果还没支付则自动取消订单
-      if (!paidRef.current) {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+      // 只有用户主动导航离开（非刷新）且未支付时才取消
+      // 简单处理：刷新页面不取消（sessionStorage 存在说明还在流程中）
+      if (!paidRef.current && !loadOrderFromStorage()) {
         cancelOrder(orderId).catch(() => {});
       }
     };
